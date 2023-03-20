@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Painting;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,7 @@ class Cart extends Model
         'user_id',
         'product_id',
         'quantity',
+        'total_price'
     ];
 
     public function user()
@@ -18,8 +20,8 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product()
+    public function painting()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Painting::class);
     }
 }
