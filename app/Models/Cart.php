@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Painting;
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,9 +11,10 @@ class Cart extends Model
 
     protected $fillable = [
         'user_id',
-        'product_id',
+        'painting_id',
         'quantity',
-        'total_price'
+        'total_price',
+        'payment_intent_id'
     ];
 
     public function user()
@@ -23,5 +25,8 @@ class Cart extends Model
     public function painting()
     {
         return $this->belongsTo(Painting::class);
+    }
+    public function payment(){
+        return $this->hasOne(Payment::class);
     }
 }

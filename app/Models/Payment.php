@@ -10,22 +10,33 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'customer_id',
+        'donor_id',
+        'donation_id',
+        'order_id',
         'payment_intent_id',
         'amount',
         'currency',
         'payment_type',
         'description',
+        'stripe_charge_id'
     ];
 
-    public function user()
+    public function donor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Donor::class);
     }
 
-    public function customer()
+
+    public function donation()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Donation::class);
+    }
+    public function currency()
+    {
+        return $this->hasMany(Currency::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany('orders');
     }
 }

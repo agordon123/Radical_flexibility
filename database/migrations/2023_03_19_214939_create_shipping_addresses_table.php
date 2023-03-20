@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('shipping_addresses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('donor_artwork_id')->unique();
-            $table->string('name');
+            $table->foreignId('donor_id')->references('id')->on('donors')->onDelete('cascade');
             $table->string('address1');
             $table->string('address2')->nullable();
-            $table->string('city');
-            $table->string('state');
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             $table->string('country');
             $table->string('postal_code');
             $table->timestamps();
 
-            $table->foreign('donor_artwork_id')->references('id')->on('donor_artwork')->onDelete('cascade');
+
         });
     }
 

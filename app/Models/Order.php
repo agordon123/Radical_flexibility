@@ -12,35 +12,32 @@ class Order extends Model
     use HasFactory;
     protected $fillable = [
         'order_number',
-        'user_id',
+        'donor_id',
         'shipping_address_id',
         'billing_address_id',
         'subtotal',
-        'tax',
         'total',
         'payment_method',
         'payment_id',
         'status',
+        'shipping_cost',
+        'order_status'
     ];
 
-    public function user()
+    public function donors()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Donor::class,'donor_id','id');
     }
 
     public function shippingAddress()
     {
-        return $this->belongsTo(Address::class, 'shipping_address_id');
+        return $this->belongsTo(Shipping_Address::class, 'shipping_address_id','id');
     }
 
-    public function billingAddress()
-    {
-        return $this->belongsTo(Address::class, 'billing_address_id');
-    }
 
     public function items()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(Painting::class);
     }
     public function payment()
     {

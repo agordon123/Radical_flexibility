@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Donor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,11 +18,15 @@ class Donation extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class,'id');
+        return $this->belongsTo(Donor::class,'id');
     }
     public function donation()
     {
         return $this->hasOne(Payment::class);
+    }
+    public function order()
+    {
+        return $this->hasOne(Order::class);
     }
 }
 

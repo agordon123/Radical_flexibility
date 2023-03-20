@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ShippingAddress extends Model
 {
     protected $fillable = [
-        'donor_artwork_id',
+        'donor_id',
         'name',
         'address1',
         'address2',
@@ -17,8 +16,8 @@ class ShippingAddress extends Model
         'postal_code'
     ];
 
-    public function donor_artwork()
+    public function donor()
     {
-        return $this->belongsTo(Donor_Artwork::class);
+        return $this->belongsTo(Donor::class);
     }
 }

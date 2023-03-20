@@ -11,23 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('donations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->decimal('amount', 10, 2);
-            $table->string('currency');
-            $table->string('givelify_donation_id')->nullable();
-            $table->string('payment_method');
-            $table->string('stripe_charge_id')->nullable();
-            $table->timestamps();
-        });
+
+
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
+        Schema::dropIfExists('orders');
         Schema::dropIfExists('donations');
     }
 };

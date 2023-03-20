@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('artwork', function (Blueprint $table) {
+        Schema::create('paintings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('artist');
             $table->string('description');
             $table->decimal('price',8,2,true);
+            $table->string('currency');
             $table->string('image_url');
-
+            $table->boolean('status');
             $table->timestamps();
         });
     }

@@ -14,11 +14,12 @@ class Painting extends Model
         'description',
         'price',
         'quantity',
+        'status'
     ];
 
     public function orders()
     {
-        return $this->belongsToMany(Order::class)->withPivot('quantity');
+        return $this->belongsToOne(Order::class);
     }
 
     public function categories()

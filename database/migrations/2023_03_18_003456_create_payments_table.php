@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
 
-            Schema::create('payments', function (Blueprint $table) {
-                $table->id();
-                $table->foreignId('order_id')->constrained('orders','id')->nullable();
-                $table->decimal('amount', 10, 2,true);
-                $table->string('currency');
-                $table->string('payment_method');
-                $table->string('stripe_charge_id')->nullable();
-                $table->timestamps();
-            });
-
+        Schema::create('payments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('donor_id')->references('id')->on('donors')->onDelete('cascade');
+            $table->foreignId('stripe_charge_id')->constrained('donations', 'id')->nullable();
+            $table->decimal('amount', 10, 2, true);
+            $table->foreignId('currency_id')->references('id')->on('currency')->onDelete('cascade');
+            $table->string('payment_intent_id');
+            $table->foreignId('order_id')->constrained('orders', 'id')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
