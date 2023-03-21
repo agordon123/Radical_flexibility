@@ -1,9 +1,6 @@
-<template>
-    <GuestLayout>
-        <template #header>
-            
-        </template>
-    </GuestLayout>
+<template #default>
+
+</template>
 </template>
 <script setup>
 

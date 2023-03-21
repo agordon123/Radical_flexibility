@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Donation;
+use Money\Money;
 use Stripe\Stripe;
+use Money\Currency;
+use App\Models\Donor;
+use App\Models\Payment;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Donor_Artwork;
-use Money\Currency;
 use Money\Currencies\ISOCurrencies;
+use App\Http\Controllers\Controller;
 use Money\Formatter\IntlMoneyFormatter;
-use Money\Money;
 
 class DonationController extends Controller
 {
@@ -59,7 +61,7 @@ class DonationController extends Controller
         ]);
 
         // Store the PaymentIntent ID in your database along with the donor's information
-        $donation = new Donor_Artwork;
+        $donation = new Payment([]);
         $donation->amount = $request->input('amount');
         $donation->receive_artwork = $request->input('receive_artwork', false);
         $donation->payment_intent_id = $intent->id;
@@ -83,7 +85,7 @@ class DonationController extends Controller
         }
 
         // Update the donation record with information about the payment
-        $donation = Donor_Artwork::where('payment_intent_id', $intent->id)->firstOrFail();
+        $donation = Payment::where('payment_intent_id', $intent->id)->firstOrFail();
         $donation->payment_status = $intent->status;
         $donation->transaction_id = $intent->charges->data[0]->id;
         $donation->save();
@@ -97,5 +99,55 @@ class DonationController extends Controller
         return view('donation.thank_you');
     }
 
+        public function index()
+    {
+        $donations = Donation::all();
+        return view('donations.index', compact('donations'));
+    }
 
+    public function create()
+    {
+        $donors = Donor::all();
+        return view('donations.create', compact('donors'));
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'donor_id' => 'required',
+            'amount' => 'required|numeric',
+        ]);
+
+        $donation = Donation::create($validatedData);
+
+        return redirect()->route('donations.index')
+            ->with('success', 'Donation created successfully.');
+    }
+
+    public function edit(Donation $donation)
+    {
+        $donors = Donor::all();
+        return view('donations.edit', compact('donation', 'donors'));
+    }
+
+    public function update(Request $request, Donation $donation)
+    {
+        $validatedData = $request->validate([
+            'donor_id' => 'required',
+            'amount' => 'required|numeric',
+        ]);
+
+        $donation->update($validatedData);
+
+        return redirect()->route('donations.index')
+            ->with('success', 'Donation updated successfully.');
+    }
+
+    public function destroy(Donation $donation)
+    {
+        $donation->delete();
+
+        return redirect()->route('donations.index')
+            ->with('success', 'Donation deleted successfully.');
+    }
 }

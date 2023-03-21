@@ -21,12 +21,6 @@ class Painting extends Model
     {
         return $this->belongsToOne(Order::class);
     }
-
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class);
-    }
-
     public function sluggable(): array
     {
         return [
@@ -36,4 +30,3 @@ class Painting extends Model
         ];
     }
 }
-

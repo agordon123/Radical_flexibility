@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
+use App\Models\Payment;
+use App\Models\Painting;
+use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use Stripe\Exception\CardException;
-use Stripe\Stripe;
-use Stripe\PaymentIntent;
-use App\Models\Payment;
 
 
 class PaymentController extends Controller
@@ -34,7 +35,7 @@ class PaymentController extends Controller
             ]);
 
             // Create a Payment record in the database
-            Payment::create([
+            $payment = Payment::create([
                 'user_id' => $request->user()->id,
                 'payment_intent_id' => $paymentIntent->id,
                 'amount' => $paymentIntent->amount / 100,
@@ -44,14 +45,55 @@ class PaymentController extends Controller
             ]);
 
             // Return the client secret for the Payment Intent
-            return response()->json([
-                'client_secret' => $paymentIntent->client_secret,
-            ]);
+            return inertia('Payment/Store',
+                ['client_secret' => $paymentIntent->client_secret],
+            );
         } catch (CardException $e) {
             // Handle any errors returned by Stripe
             return response()->json([
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+        public function index()
+    {
+        $payments = Payment::all();
+        return view('payments.index', compact('payments'));
+    }
+
+    public function create()
+    {
+        $paintings = Painting::all();
+        return view('payments.create', compact('paintings'));
+    }
+
+
+    public function edit(Payment $payment)
+    {
+        $paintings = Painting::all();
+        return view('payments.edit', compact('payment', 'paintings'));
+    }
+
+    public function update(Request $request, Payment $payment)
+    {
+        $validatedData = $request->validate([
+            'painting_id' => 'required',
+            'amount' => 'required|numeric',
+            'currency' => 'required',
+            'payment_method' => 'required',
+        ]);
+
+        $payment->update($validatedData);
+
+        return redirect()->route('payments.index')
+            ->with('success', 'Payment updated successfully.');
+    }
+
+    public function destroy(Payment $payment)
+    {
+        $payment->delete();
+
+        return redirect()->route('payments.index')
+            ->with('success', 'Payment deleted successfully.');
     }
 }

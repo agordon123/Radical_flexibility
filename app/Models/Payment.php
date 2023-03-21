@@ -25,12 +25,6 @@ class Payment extends Model
     {
         return $this->belongsTo(Donor::class);
     }
-
-
-    public function donation()
-    {
-        return $this->belongsTo(Donation::class);
-    }
     public function currency()
     {
         return $this->hasMany(Currency::class);

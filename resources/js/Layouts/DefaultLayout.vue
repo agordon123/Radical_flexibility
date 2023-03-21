@@ -1,21 +1,17 @@
 <template>
-    <div>
-        <header>
-            <!-- header content here -->
-            <slot />
-        </header>
-
-        <main>
-
-        </main>
+  <div>
+    <NavBar />
+    <div class="container">
+      <slot />
     </div>
+  </div>
 </template>
 
 <script setup>
 
 import { onMounted, reactive } from "vue";
 import { Link } from "@inertiajs/vue3";
-
+import { NavBar } from '@/Components/NavBar.vue';
 
 
 
