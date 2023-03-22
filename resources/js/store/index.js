@@ -3,12 +3,12 @@ const pinia = createPinia();
 
 export const usePaintingStore = defineStore({
     state: () => ({
-        products: [],
+        paintings: [],
     }),
     actions: {
-        async fetchProducts() {
+        async fetchPaintings() {
             try {
-                const response = await fetch("/gallery/:id");
+                const response = await fetch("/paintings/:id");
                 const products = await response.json();
                 this.products = products;
             } catch (error) {

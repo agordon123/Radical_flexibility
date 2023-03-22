@@ -1,6 +1,6 @@
-<template #default>
+<template>
 
-</template>
+
 </template>
 <script setup>
 

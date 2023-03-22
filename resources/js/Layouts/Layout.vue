@@ -1,20 +1,17 @@
 <template>
-  <div>
-    <NavBar />
-    <div class="container">
-      <slot />
+    <div>
+        <NavBar />
+        <div class="container">
+            <slot />
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup>
-
 import { onMounted, reactive } from "vue";
-import { Link } from "@inertiajs/vue3";
-import { NavBar } from '@/Components/NavBar.vue';
-
-
-
+import { Link, usePage } from "@inertiajs/vue3";
+import { NavBar } from "@/Components/UI/NavBar.vue";
+const page = usePage();
 const Home = {
     setup() {
         const state = reactive({

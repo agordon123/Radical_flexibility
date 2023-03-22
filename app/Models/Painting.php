@@ -14,9 +14,9 @@ class Painting extends Model
         'description',
         'price',
         'quantity',
-        'status'
+        'available'
     ];
-
+    protected $casts = ['title'=>'string','available'=>'boolean'];
     public function orders()
     {
         return $this->belongsToOne(Order::class);

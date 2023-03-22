@@ -12,19 +12,14 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
 
-export default {
-  name: 'PaintingCard',
-  props: {
-    painting: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup(props) {
+const props = defineProps({'PaintingCard':{type:Object,required:true}})
+
+
     const page = usePage();
 
     const formatPrice = (price) => {
@@ -39,6 +34,6 @@ export default {
       formatPrice,
       isActive,
     };
-  },
-};
+
+
 </script>
