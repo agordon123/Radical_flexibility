@@ -8,7 +8,7 @@ class PageController extends Controller
 {
     public function home()
     {
-        return Inertia::render('Home');
+        return Inertia::render('Home/HomePage',['title'=>'Home','layout'=>'Layout']);
     }
 
     public function about()

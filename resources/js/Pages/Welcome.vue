@@ -1,8 +1,8 @@
 <template>
-<Head title="home"></Head>
-<div>
-
-</div>
+    <Head title="Radical Flexibility"></Head>
+    <Layout>
+        <slot />
+    </Layout>
 </template>
 
 <style>
@@ -15,3 +15,6 @@
     }
 }
 </style>
+<script setup>
+import Layout from "@/Layouts/Layout.vue";
+</script>

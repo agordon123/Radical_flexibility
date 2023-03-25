@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class ImageController extends Controller
 {
-    public function orderPainting()
+    public function store()
     {
         
     }

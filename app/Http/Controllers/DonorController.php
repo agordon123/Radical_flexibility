@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donor;
+use Illuminate\Auth\Events\Validated;
+use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,8 +16,9 @@ class DonorController extends Controller
         return Inertia::render('donors.index', compact('donors'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $validatedData = $request->validate();
         return inertia('Donor/Create','donors.create');
     }
 

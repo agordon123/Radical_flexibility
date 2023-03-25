@@ -1,8 +1,9 @@
 <template>
-    <div v-for="product in products" :key="product.id">
-        <img :src="product.image" alt="Product Image" />
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
+    <div v-for="painting in paintings" :key="painting.id">
+        <img :src="painting.image_url" alt="Painting" />
+        <h3>{{ painting.name }}</h3>
+        <p>{{ painting.description }}</p>
+        <p>{{painting.price}}</p>
         <button @click="addToCart(product)">Add to Cart</button>
     </div>
 </template>

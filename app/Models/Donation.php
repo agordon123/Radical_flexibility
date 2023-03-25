@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Donation extends Model
 {
     use HasFactory;
-
+    protected $connection = 'mysqli';
     protected $fillable = [
         'user_id',
         'amount',
@@ -29,4 +29,3 @@ class Donation extends Model
         return $this->hasOne(Order::class);
     }
 }
-

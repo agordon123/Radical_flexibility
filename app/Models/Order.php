@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    protected $connection = 'mysqli';
+    protected $table = 'orders';
+
     protected $fillable = [
         'order_number',
         'donor_id',
@@ -41,7 +45,6 @@ class Order extends Model
     }
     public function payment()
     {
-        return $this->hasOne('payment');
+        return $this->hasOne(Payment::class);
     }
 }
-

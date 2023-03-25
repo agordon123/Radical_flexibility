@@ -11,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('painting_id')->references('id')->on('paintings');
+            $table->string('filename');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -19,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscription_items');
+        Schema::dropIfExists('images');
     }
 };

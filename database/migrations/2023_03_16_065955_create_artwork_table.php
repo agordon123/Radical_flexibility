@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('description');
             $table->decimal('price',8,2,true);
             $table->string('currency');
-            $table->string('image_url');
+            $table->string('image_path');
             $table->boolean('status');
             $table->timestamps();
         });

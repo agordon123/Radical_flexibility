@@ -20,4 +20,8 @@ class ShippingAddress extends Model
     {
         return $this->belongsTo(Donor::class);
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

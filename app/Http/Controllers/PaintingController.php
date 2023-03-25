@@ -9,8 +9,8 @@ class PaintingController extends Controller
 {
     public function index()
     {
-        $painting = Painting::all();
-        return inertia('Painting/Index',[]);
+        $paintings = Painting::all();
+        return inertia('Painting/Index',['paintings'=>$paintings]);
     }
 
     public function getAvailablePaintings()
@@ -18,5 +18,6 @@ class PaintingController extends Controller
     $availablePaintings = Painting::where('available', true)->get();
     return inertia('paintings.index', ['paintings' => $availablePaintings]);
     }
+
 
 }

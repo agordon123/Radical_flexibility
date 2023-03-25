@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('stripe_id')->nullable()->index();
+            $table->string('payment_intent_id');
             $table->string('pm_type')->nullable();
             $table->string('pm_last_four', 4)->nullable();
             $table->timestamps();

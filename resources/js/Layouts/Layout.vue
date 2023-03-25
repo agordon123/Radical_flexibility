@@ -1,51 +1,47 @@
-<template>
-    <div>
-        <NavBar />
-        <div class="container">
-            <slot />
-        </div>
-    </div>
-</template>
-
 <script setup>
-import { onMounted, reactive } from "vue";
-import { Link, usePage } from "@inertiajs/vue3";
-import { NavBar } from "@/Components/UI/NavBar.vue";
-const page = usePage();
-const Home = {
-    setup() {
-        const state = reactive({
-            products: useProductsStore().products,
-        });
-
-        const addToCart = (product) => {
-            // logic to add product to cart
-        };
-
-        onMounted(() => {
-            useProductsStore().fetchProducts();
-        });
-
-        return {
-            state,
-            addToCart,
-        };
+import { defineComponent, ref } from "vue";
+import ApplicationLogo from "@/Components/UI/ApplicationLogo.vue";
+import Dropdown from "@/Components/UI/Dropdown.vue";
+import DropdownLink from "@/Components/UI/DropdownLink.vue";
+import NavLink from "@/Components/UI/NavLink.vue";
+import ResponsiveNavLink from "@/Components/UI/ResponsiveNavLink.vue";
+import { Link } from "@inertiajs/vue3";
+import NavBar from "@/Components/UI/NavBar.vue";
+const showingNavigationDropdown = ref(false);
+defineComponent({
+    props: {
+        ApplicationLogo,
+        DropdownLink,
+        Dropdown,
+        NavLink,
+        NavBar,
+        ResponsiveNavLink,
+        Link,
     },
-};
-
-const About = {
-    template: "<div>About Us</div>",
-};
-
-const FAQ = {
-    template: "<div>FAQ</div>",
-};
-
-const Donate = {
-    template: "<div>Donate</div>",
-};
-
-const Gallery = {
-    template: "<div>Gallery</div>",
+    name: "Layout",
+});
+</script>
+<template>
+    <div class="flex md:mt-20 flex-row bg-black text-green-700 h-8">
+        <slot name="header">
+            <NavBar />
+        </slot>
+    </div>
+    <template>
+        <div class="bg-beige">
+            <main>
+                <slot />
+            </main>
+        </div>
+    </template>
+    <template>
+        <footer>
+            <slot name="footer"></slot>
+        </footer>
+    </template>
+</template>
+<script>
+export default {
+    layout: "Layout",
 };
 </script>

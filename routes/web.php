@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\DonationController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserController;
+
 
 // Home page
-Route::get('/', [PageController::class, 'home'])->name('home');
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
 // About us page
 Route::get('/about', [PageController::class, 'about'])->name('about');
-
 // FAQ page
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 
@@ -17,9 +19,8 @@ Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
 
 // Donation page
 Route::get('/donate', [PageController::class, 'donate'])->name('donate');
-
 // Handle donation form submission
-Route::post('/donate', [PageController::class, 'processDonation'])->name('processDonation');
+Route::post('/donate', [DonationController::class, 'processDonation'])->name('processDonation');
 
 // Donation confirmation page
 Route::get('/donate/thank-you', [PageController::class, 'donationConfirmation'])->name('donationConfirmation');
@@ -41,3 +42,9 @@ Route::put('/payments/{payment}', [PaymentController::class, 'update'])
 
 Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])
     ->name('payments.destroy');
+
+Route::get('/profile/{id}/edit',[UserController::class,'update'])->name('profile.edit');
+Route::get('/paintings',[PaintingController::class, 'PaintingController@index'])->name('paintings');
+Route::get('/paintings/{path}', [PaintingController::class, 'PaintingController@getAvailablePaintings'])
+    ->where('path', '.*')
+    ->name('painting/{id}');
