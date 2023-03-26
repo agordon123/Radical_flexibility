@@ -21,6 +21,7 @@
         "@heroicons/vue": "^2.0.16",
         "@stripe/stripe-js": "^1.50.0",
         "@vueuse/core": "^9.13.0",
+        "flowbite": "^1.6.4",
         "pinia": "^2.0.33"
     }
 }

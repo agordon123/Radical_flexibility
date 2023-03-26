@@ -1,7 +1,11 @@
 <template>
-    <Head title="Radical Flexibility home"></Head>
+    <Head title="Radical Flexibility"></Head>
     <Layout>
-        {{ title }}
+        <template #default
+            ><div>
+                <span> {{ title }}</span>
+            </div></template
+        >
     </Layout>
 </template>
 
@@ -10,6 +14,8 @@ import Layout from "@/Layouts/Layout.vue";
 import { usePage, Head } from "@inertiajs/vue3";
 import { defineComponent } from "vue";
 import { ref } from "vue";
+
+
 usePage("HomePage");
 defineComponent({
     name: "HomePage",
