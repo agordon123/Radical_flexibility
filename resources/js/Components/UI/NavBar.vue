@@ -1,4 +1,5 @@
 <template>
+    <div></div>
     <nav class="flex flex-row absolute top-2 left-0 right-0 z-50 text-grey-200">
         <ApplicationLogo />
         <div class="container-fluid flex items-center flex-shrink-0">
