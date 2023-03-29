@@ -1,7 +1,8 @@
 <template>
-    <div></div>
-    <nav class="flex flex-row absolute top-2 left-0 right-0 z-50 text-grey-200">
-        <ApplicationLogo />
+    <nav
+        class="container-fluid flex flex-row absolute top-0 left-0 right-0 z-50 text-primary bg-white"
+    >
+        <div><ApplicationLogo /></div>
         <div class="container-fluid flex items-center flex-shrink-0">
             <span class="font-semibold text-2xl">Radical Flexibility</span>
         </div>
@@ -17,26 +18,26 @@
             </button>
         </div>
         <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-            <div class="text-sm lg:flex-grow">
+            <div class="text-md lg:flex-grow">
                 <Link
                     href="/about"
-                    class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300 mr-4"
+                    class="block mt-4 lg:inline-block lg:mt-0 hover:text-gray-300 mr-4"
                 >
                     About The Founders
                 </Link>
                 <Link
                     href="/FAQ"
-                    class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300 mr-4"
+                    class="block mt-4 lg:inline-block lg:mt-0 hover:text-gray-300 mr-4"
                 >
                     Our Mission
                 </Link>
                 <Link
                     href="/gallery"
-                    class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-gray-300"
+                    class="block mt-4 lg:inline-block lg:mt-0 hover:text-gray-300"
                 >
                     Artwork
                 </Link>
-                <Link href="/donate"
+                <Link href="/donate" class="self-right justify-end"
                     ><PrimaryButton> Donate </PrimaryButton>
                 </Link>
             </div>

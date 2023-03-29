@@ -8,13 +8,15 @@ use Cviebrock\EloquentSluggable\Sluggable;
 class Painting extends Model
 {
     use Sluggable;
-
+    protected $connection = 'mysqli';
     protected $fillable = [
+        'name',
         'title',
         'description',
         'price',
-        'quantity',
-        'available'
+        'currency',
+        'available',
+        'filename'
     ];
     protected $casts = ['title'=>'string','available'=>'boolean'];
     public function orders()
@@ -25,7 +27,7 @@ class Painting extends Model
     {
         return [
             'slug' => [
-                'source' => 'title'
+                'source' => 'artist'
             ]
         ];
     }

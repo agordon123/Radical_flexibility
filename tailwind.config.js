@@ -16,8 +16,21 @@ module.exports = {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
-        },
-    },
 
-    plugins: [require('@tailwindcss/forms'),require('flowbite/plugin')],
-};
+            backgroundColor: {
+                'primary': '#d4bfa3', // your primary color
+                'secondary': '#eac27f', // your secondary color
+                'accent': '#bdb9ac', // your accent color
+            },
+            textColor: {
+                'primary': '#7d9d95', // your primary text color
+                'secondary': '#e2e8f0', // your secondary text color
+            },
+
+
+
+            plugins: [require('@tailwindcss/forms'), require('flowbite/plugin')],
+        }
+    }
+
+}

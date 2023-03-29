@@ -22,13 +22,13 @@ defineComponent({
 });
 </script>
 <template>
-    <div class="flex flex-row bg-black text-green-700 h-20">
+    <div class="flex flex-row min-h-[full-screen] text-primary container">
         <slot name="header">
-            <NavBar />
+            <NavBar class="bg-primary" />
         </slot>
     </div>
     <template>
-        <div class="bg-brown-300">
+        <div class="">
             <main>
                 <slot />
             </main>

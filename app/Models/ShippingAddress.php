@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 class ShippingAddress extends Model
 {
+    protected $connection = 'mysqli';
     protected $fillable = [
         'donor_id',
         'name',

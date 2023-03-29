@@ -20,14 +20,14 @@ class ProcessImages extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'StoreImages';
 
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
-        $path = storage_path('app/public');
+        $path = storage_path('storage/app/public');
         $images = collect(File::allFiles($path))->map(function ($image) use ($path) {
         return [
             'filename' => $image->getFilename(),

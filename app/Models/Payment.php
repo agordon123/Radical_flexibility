@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     use HasFactory;
-
+    protected $connection = 'mysqli';
     protected $fillable = [
         'donor_id',
         'donation_id',

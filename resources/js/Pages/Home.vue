@@ -1,12 +1,13 @@
 <template>
-    <Head title="Radical Flexibility"></Head>
-    <Layout>
-        <template #default
-            ><div>
-                <span> {{ title }}</span>
-            </div></template
-        >
-    </Layout>
+    <div>
+        <Layout>
+            <template #default>
+                <div>
+                    <span> {{ $page.props.title }}</span>
+                </div>
+            </template>
+        </Layout>
+    </div>
 </template>
 
 <script setup>
@@ -15,8 +16,7 @@ import { usePage, Head } from "@inertiajs/vue3";
 import { defineComponent } from "vue";
 import { ref } from "vue";
 
-
-usePage("HomePage");
+const homePage = usePage();
 defineComponent({
     name: "HomePage",
     title: ref("Welcome to the Home Page"),

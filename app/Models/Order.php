@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Cviebrock\EloquentSluggable\Sluggable;
 
 
 class Order extends Model
 {
     use HasFactory;
-
+    use Sluggable;
     protected $connection = 'mysqli';
     protected $table = 'orders';
 
@@ -46,5 +46,9 @@ class Order extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+    public function sluggable()
+    {
+
     }
 }
