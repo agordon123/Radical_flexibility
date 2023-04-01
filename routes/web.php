@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PaintingController;
-use Inertia\Inertia;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 // Home page
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', PaintingController::class);
 // About us page
 Route::get('/about', [PageController::class, 'about'])->name('about');
 // FAQ page
@@ -44,9 +44,9 @@ Route::put('/payments/{payment}', [PaymentController::class, 'update'])
 Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])
     ->name('payments.destroy');
 
-Route::get('/profile/{id}/edit',[UserController::class,'update'])->name('profile.edit');
-Route::get('/paintings',[PaintingController::class, 'PaintingController@index'])->name('paintings');
+Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
+Route::get('/paintings', PaintingController::class)->name('paintings.index');
 Route::get('/paintings', [PaintingController::class, 'PaintingController@getAvailablePaintings'])
     ->where('path', '.*')
     ->name('painting/{id}');
-Route::resource('paintings', [PaintingController::class,'']);
+Route::resource('paintings', [PaintingController::class, '']);

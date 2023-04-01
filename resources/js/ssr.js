@@ -7,17 +7,21 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = 'RadicalAction';
 
-createServer((page) => createInertiaApp({
-  page,
-  render: renderToString,
-  resolve: name => require(`./Pages/${name}`),
-  title: title => title ? `${title} - Ping CRM` : 'Ping CRM',
-  setup({ app, props, plugin }) {
-    return createSSRApp({
-      render: () => h(app, props),
-    }).use(plugin)
-  },
-})
-)
+createServer((page) =>
+    createInertiaApp({
+        page,
+        render: renderToString,
+        title: (title) => `${title} - ${appName}`,
+        resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+        setup({ App, props, plugin }) {
+            return createSSRApp({ render: () => h(App, props) })
+                .use(plugin)
+                .use(ZiggyVue, {
+                    ...page.props.ziggy,
+                    location: new URL(page.props.ziggy.location),
+                });
+        },
+    })
+);
 
 

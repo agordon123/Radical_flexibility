@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Model;
 
 class Painting extends Model
 {
     use Sluggable;
-    protected $connection = 'mysqli';
     protected $fillable = [
         'name',
         'title',
@@ -16,9 +15,9 @@ class Painting extends Model
         'price',
         'currency',
         'available',
-        'filename'
+        'filename',
     ];
-    protected $casts = ['title'=>'string','available'=>'boolean'];
+    protected $casts = ['title' => 'string', 'available' => 'boolean'];
     public function orders()
     {
         return $this->belongsToOne(Order::class);
@@ -27,8 +26,8 @@ class Painting extends Model
     {
         return [
             'slug' => [
-                'source' => 'artist'
-            ]
+                'source' => 'title',
+            ],
         ];
     }
 }

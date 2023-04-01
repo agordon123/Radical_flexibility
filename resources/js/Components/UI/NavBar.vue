@@ -1,46 +1,16 @@
 <template>
-    <nav
-        class="container-fluid flex flex-row absolute top-0 left-0 right-0 z-50 text-primary bg-white"
+    <div
+        class="flex items-center flex-shrink-0 text-primary justify-center mt-10 drop-shadow-sm shadow-amber-400"
     >
-        <div><ApplicationLogo /></div>
-        <div class="container-fluid flex items-center flex-shrink-0">
-            <span class="font-semibold text-2xl">Radical Flexibility</span>
-        </div>
-        <div class="block lg:hidden">
-            <button
-                class="flex items-center px-3 py-2 border rounded border-white hover:text-gray-300 hover:border-gray-300"
-            >
-                <svg class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        d="M0 4.4C0 3.6.6 3 1.4 3h17.2c.8 0 1.4.6 1.4 1.4v1.2c0 .8-.6 1.4-1.4 1.4H1.4C.6 7 0 6.4 0 5.6V4.4zM0 10.8c0-.8.6-1.4 1.4-1.4h17.2c.8 0 1.4.6 1.4 1.4v1.2c0 .8-.6 1.4-1.4 1.4H1.4c-.8 0-1.4-.6-1.4-1.4v-1.2zm0 6.4c0-.8.6-1.4 1.4-1.4h17.2c.8 0 1.4.6 1.4 1.4v1.2c0 .8-.6 1.4-1.4 1.4H1.4c-.8 0-1.4-.6-1.4-1.4v-1.2z"
-                    />
-                </svg>
-            </button>
-        </div>
+        <ApplicationLogo />
+        <span class="text-2xl ml-8 font-serif">Radical Flexibility</span>
+    </div>
+    <br />
+    <nav
+        class="flex items-center justify-between flex-wrap bg-white p-6 w-full"
+    >
         <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-            <div class="text-md lg:flex-grow">
-                <Link
-                    href="/about"
-                    class="block mt-4 lg:inline-block lg:mt-0 hover:text-gray-300 mr-4"
-                >
-                    About The Founders
-                </Link>
-                <Link
-                    href="/FAQ"
-                    class="block mt-4 lg:inline-block lg:mt-0 hover:text-gray-300 mr-4"
-                >
-                    Our Mission
-                </Link>
-                <Link
-                    href="/gallery"
-                    class="block mt-4 lg:inline-block lg:mt-0 hover:text-gray-300"
-                >
-                    Artwork
-                </Link>
-                <Link href="/donate" class="self-right justify-end"
-                    ><PrimaryButton> Donate </PrimaryButton>
-                </Link>
-            </div>
+            <!-- navbar links or buttons go here -->
         </div>
     </nav>
 </template>

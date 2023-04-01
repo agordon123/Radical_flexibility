@@ -13,7 +13,7 @@ import { usePage } from "@inertiajs/vue3";
 import { defineProps } from "vue";
 import {TheCard} from 'flowbite-vue'
 defineProps({
-    paintings: { type: Array  },
+    painting: { type: Object  },
 });
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 mr-auto">
+     <div class="flex items-center flex-shrink-0">
         <svg
             class="w-12 lg:w-14 xl:w-16 h-12 lg:h-14 xl:h-16"
             viewBox="0 0 463 457"
