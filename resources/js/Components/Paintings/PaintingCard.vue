@@ -12,11 +12,11 @@ import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 import { defineProps } from "vue";
 import {TheCard} from 'flowbite-vue'
-const props = defineProps({
-    paintings: { type: Array, required: true },
+defineProps({
+    paintings: { type: Array  },
 });
 
-const {page} = usePage();
+
 const paintings = computed(() => {
     
 })
