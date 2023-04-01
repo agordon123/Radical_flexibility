@@ -46,7 +46,3 @@ Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])
 
 Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
 Route::get('/paintings', PaintingController::class)->name('paintings.index');
-Route::get('/paintings', [PaintingController::class, 'PaintingController@getAvailablePaintings'])
-    ->where('path', '.*')
-    ->name('painting/{id}');
-Route::resource('paintings', [PaintingController::class, '']);

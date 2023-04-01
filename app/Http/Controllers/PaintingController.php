@@ -9,10 +9,11 @@ use Inertia\Inertia;
 
 class PaintingController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
+        
         $paintings = Painting::all();
-        return Inertia::render('/paintings', ['paintings' => $paintings]);
+        return Inertia::render('Home', ['paintings' => $paintings]);
     }
 
     public function store(Request $request)
@@ -34,10 +35,6 @@ class PaintingController extends Controller
 
         return redirect()->back()->with('success', 'Image saved successfully.');
     }
-    public function getAvailablePaintings()
-    {
-        $availablePaintings = Painting::where('status', true)->get();
-        return inertia('paintings.index', ['paintings' => $availablePaintings]);
-    }
+
 
 }

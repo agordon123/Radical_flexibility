@@ -13,6 +13,6 @@ class PaintingIndexController extends Controller
     public function __invoke(Request $request)
     {
         $paintings = Painting::all();
-        return Inertia::render('Paintings/Index',['paintings'=>$paintings]);
+        return Inertia::render('Home',['paintings'=>$paintings]);
     }
 }

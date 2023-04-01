@@ -22,6 +22,8 @@ defineComponent({
     title: ref("Welcome to the Home Page"),
 
 });
-
+defineProps({
+    paintings:props.paintings
+})
 const title = ref("Radical Flexibility");
 </script>
