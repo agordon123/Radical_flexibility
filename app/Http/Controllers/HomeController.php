@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
 use App\Models\Painting;
-
+use Inertia\Inertia;
 
 class HomeController extends Controller
 {
 
-      public function index()
+    public function index()
     {
         $paints = Painting::all();
-        return Inertia::render('Home',['paintings'=>$paints]);
+        return Inertia::render('Home', ['paintings' => $paints]);
     }
+
 }

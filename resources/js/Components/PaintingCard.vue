@@ -1,31 +1,47 @@
 <!-- resources/js/Components/PaintingCard.vue -->
 
 <template>
-  <div class="card">
-    <img :src="image_path" :alt="title" class="card-img-top" />
-    <div class="card-body">
-      <h5 class="card-title">{{ title }}</h5>
-      <p class="card-text">{{ description }}</p>
-      <p class="card-text">Artist: {{ artist }}</p>
-      <p class="card-text">Price: ${{ price }}</p>
-      <button class="btn btn-primary" @click="buyPainting">Buy Painting</button>
+    <div v-for="painting in paintings" :key="painting.id">
+        <TheCard :img-src="`${painting.filename}`" ref="paintingContainer">
+            <div class="card-body">
+                <h5 class="card-title">{{ painting.title }}</h5>
+                <p class="card-text">{{ painting.description }}</p>
+                <p class="card-text">Artist: {{ painting.name }}</p>
+                <p class="card-text">Price: ${{ painting.price }}</p>
+                <button class="btn btn-primary" @click="buyPainting">
+                    Buy Painting
+                </button>
+            </div>
+        </TheCard>
     </div>
-  </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-
+import { usePage } from "@inertiajs/vue3";
+import { TheCard } from "flowbite-vue";
+import { computed, defineComponent, ref } from "vue";
+defineComponent({
+    name: "PaintingCard",
+    props: props,
+    painting: Object || null,
+});
+const paintingContainer = ref(null);
+const paintings = computed(() => usePage().props.paintings);
 const props = defineProps({
-  id: Number,
-  image_path: String,
-  title: String,
-  description: String,
-  artist: String,
-  price: Number,
+    painting: {
+        id: Number,
+        filename: String,
+        name: String,
+        description: String,
+        artist: String,
+        price: Number,
+        status: Boolean,
+        created_at: Date,
+        updated_at: Date,
+    },
 });
 
 const buyPainting = () => {
-  // Implement the logic for buying the painting here.
+    // Implement the logic for buying the painting here.
 };
 </script>

@@ -11,11 +11,11 @@ class PaintingController extends Controller
 {
     public function __invoke()
     {
-        
+
         $paintings = Painting::all();
         return Inertia::render('Home', ['paintings' => $paintings]);
     }
-    
+
     public function store(Request $request)
     {
         $request->validate([
@@ -34,6 +34,9 @@ class PaintingController extends Controller
         $image->save();
 
         return redirect()->back()->with('success', 'Image saved successfully.');
+    }
+    public function show($id){
+        
     }
 
 

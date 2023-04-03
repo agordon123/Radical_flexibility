@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
-        public function index()
+    public function index()
     {
         return Inertia::render('Users/Index', [
             'users' => User::all()->map(function ($user) {
@@ -30,7 +30,8 @@ class UserController extends Controller
     {
         $user = $request->user;
     }
-    public function delete(Request $request){
-        
+    public function delete(Request $request)
+    {
+
     }
 }
