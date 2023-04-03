@@ -16,14 +16,14 @@ import { usePage, Head } from "@inertiajs/vue3";
 import { defineComponent } from "vue";
 import { ref } from "vue";
 
-const {props} = usePage();
+const props = usePage();
 defineComponent({
     name: "HomePage",
     title: ref("Welcome to the Home Page"),
 
 });
 defineProps({
-    paintings:props.paintings
+    paintings:Array
 })
 const title = ref("Radical Flexibility");
 </script>

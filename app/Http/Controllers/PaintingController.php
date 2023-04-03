@@ -15,7 +15,7 @@ class PaintingController extends Controller
         $paintings = Painting::all();
         return Inertia::render('Home', ['paintings' => $paintings]);
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([

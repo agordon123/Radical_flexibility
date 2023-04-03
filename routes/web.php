@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 // Home page
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/', PaintingController::class);
 // About us page
 Route::get('/about', [PageController::class, 'about'])->name('about');
 // FAQ page
