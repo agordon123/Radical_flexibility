@@ -1,8 +1,17 @@
 <!-- resources/js/Components/PaintingCard.vue -->
 
 <template>
-    <div v-for="painting in paintings" :key="painting.id">
-        <TheCard :img-src="`${painting.filename}`" ref="paintingContainer">
+    <div
+        v-for="painting in paintings"
+        :key="painting.id"
+        class="w-full max-w-sm lg:max-w-[80%] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 items-center justify-center"
+    >
+        <TheCard
+            variant="image"
+            :img-src="`${painting.filename}`"
+            ref="paintingContainer"
+            :img-alt="`${painting.name}`"
+        >
             <div class="card-body">
                 <h5 class="card-title">{{ painting.title }}</h5>
                 <p class="card-text">{{ painting.description }}</p>
