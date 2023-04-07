@@ -1,12 +1,12 @@
 <template>
-    <Head title="Home" />
+    <Head :title="title" />
     <Layout>
         <div
-            class="grid grid-cols-3 gap-4 mx-auto max-w-[80%]"
+            class="grid grid-cols-3"
             v-for="painting in paintings"
             :key="painting.id"
         >
-            <PaintingCard :paintings="paintings" class="container" />
+            <PaintingCard :paintings="paintings" />
         </div>
     </Layout>
 </template>

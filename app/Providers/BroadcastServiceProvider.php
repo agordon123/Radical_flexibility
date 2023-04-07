@@ -1,19 +1,18 @@
 <?php
-
 namespace App\Providers;
-
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Broadcasting\BroadcastManager;
+use Illuminate\Broadcasting\Broadcasters\RedisBroadcaster;
 
 class BroadcastServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function boot()
     {
-        Broadcast::routes();
+        Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-        require base_path('routes/channels.php');
+        $this->app->make(BroadcastManager::class)->extend('redis', function ($app) {
+            return new RedisBroadcaster($app['redis']);
+        });
     }
 }

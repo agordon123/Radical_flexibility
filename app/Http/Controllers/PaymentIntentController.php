@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use Stripe\Stripe;
 use App\Models\Payment;
+use Inertia\Controller;
 use App\Models\Painting;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use Stripe\Exception\CardException;
 
-
-class PaymentController extends Controller
+class PaymentIntentController extends Controller
 {
-    public function store(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function createPaymentIntent(Request $request)
     {
         // Validate the request data
         $request->validate([

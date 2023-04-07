@@ -6,21 +6,15 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StripeWebhookController;
 
-// Home page
-Route::get('/', [HomeController::class, 'index'])->name('home');
-// About us page
-Route::get('/about', [PageController::class, 'about'])->name('about');
+
 // FAQ page
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 
-// Gallery page
-Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
-
 // Donation page
 Route::get('/donate', [PageController::class, 'donate'])->name('donate');
-// Handle donation form submission
-Route::post('/donate', [DonationController::class, 'processDonation'])->name('processDonation');
+
 
 // Donation confirmation page
 Route::get('/donate/thank-you', [PageController::class, 'donationConfirmation'])->name('donationConfirmation');
@@ -45,3 +39,13 @@ Route::delete('/payments/{payment}', [PaymentController::class, 'destroy'])
 
 Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
 Route::get('/paintings', PaintingController::class)->name('paintings.index');
+
+
+
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->middleware('stripe.webhook');
+
+Route::middleware(['web'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/about', [PageController::class, 'about'])->name('about');
+    Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
+});

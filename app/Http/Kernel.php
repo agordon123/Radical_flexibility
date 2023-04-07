@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
 
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
              \App\Http\Middleware\HandleInertiaRequests::class,
+
         ],
 
         'api' => [
@@ -47,6 +48,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
     ];
 
     /**
@@ -67,5 +69,9 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+    ];
+    protected $routeMiddleware = [
+        'stripe' => \App\Http\Middleware\StripeMiddleware::class,
+        'stripe.webhook' => \App\Http\Middleware\StripeWebhookMiddleware::class,
     ];
 }

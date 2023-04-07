@@ -196,6 +196,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Inertia\ServiceProvider::class
 
+
     ],
 
     /*
@@ -210,6 +211,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Stripe' => \Stripe\Stripe::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

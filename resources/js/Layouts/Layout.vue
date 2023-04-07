@@ -1,68 +1,66 @@
 <template>
     <div class="min-h-screen bg-white">
-        <header class="bg-white border-b border-gray-200">
+        <header class="bg-white border-b">
             <div class="container mx-auto px-4 py-5">
-                <div class="flex items-center justify-center h-16">
-                    <application-logo class="h-12 w-auto" />
+                <div class="flex items-center justify-center h-20">
+                    <application-logo class="h-16 w-auto" />
                     <h1
-                        class="text-4xl font-bold ml-4 text-navy-blue drop-shadow-lg"
+                        class="text-4xl font-bold ml-4 text-navy-blue drop-shadow-lg font-serif"
                     >
                         Radical Flexibility
                     </h1>
                 </div>
                 <nav
-                    class="bg-navy-blue py-2 shadow-md mt-4 rounded-lg drop-shadow-lg"
+                    class="bg-navy-blue py-2 shadow-md mt-2 rounded-lg drop-shadow-lg"
                 >
-                    <ul class="flex justify-between space-x-4 mx-auto">
+                    <ul class="flex justify-between space-x-4 ml-4 mr-4">
                         <li>
-                            <a
-                                href="#"
+                            <NavLink
+                                href="/"
                                 class="text-gold-accent font-semibold hover:underline"
-                                >Home</a
+                                >Home
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                href="/Gallery"
+                                class="text-gold-accent font-semibold hover:underline"
+                                >Art Gallery</NavLink
                             >
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NavLink
+                                href="/checkout"
                                 class="text-gold-accent font-semibold hover:underline"
-                                >Art Gallery</a
+                                >Donate</NavLink
                             >
                         </li>
                         <li>
-                            <a
+                            <NavLink
                                 href="#"
                                 class="text-gold-accent font-semibold hover:underline"
-                                >Donate</a
+                                >Contact Us</NavLink
                             >
                         </li>
                         <li>
-                            <a
+                            <NavLink
                                 href="#"
                                 class="text-gold-accent font-semibold hover:underline"
-                                >Contact Us</a
+                                >FAQ</NavLink
                             >
                         </li>
                         <li>
-                            <a
+                            <NavLink
                                 href="#"
                                 class="text-gold-accent font-semibold hover:underline"
-                                >FAQ</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                class="text-gold-accent font-semibold hover:underline"
-                                >Admin Panel</a
+                                >Admin Panel</NavLink
                             >
                         </li>
                     </ul>
                 </nav>
             </div>
         </header>
-        <main
-            class="container max-w-[80%] items-center justify-center ml-[6%] mr-[6%] flex-grow-0"
-        >
+        <main class="container justify-center flex-grow-0 content-center">
             <slot />
         </main>
     </div>
@@ -70,9 +68,10 @@
 
 <script setup>
 import ApplicationLogo from "@/Components/UI/ApplicationLogo.vue";
+import NavLink from "@/Components/UI/NavLink.vue";
 </script>
 <script>
-export default {};
+export default { components: { NavLink } };
 </script>
 <style>
 .text-navy-blue {
