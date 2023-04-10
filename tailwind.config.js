@@ -18,16 +18,17 @@ module.exports = {
             },
 
             backgroundColor: {
-                'primary': '#d4bfa3', // your primary color
-                'secondary': '#eac27f', // your secondary color
-                'accent': '#bdb9ac', // your accent color
+                'primary': '#70442c', // your primary color
+                'secondary': '#d0c4a4', // your secondary color
+                 // your accent color
             },
             textColor: {
-                'primary': '#7d9d95', // your primary text color
-                'secondary': '#e2e8f0', // your secondary text color
+                'primary': 'black', // your primary text color
+                'secondary': '#70442c', // your secondary text color
+                'accent': '#d0c4a4',
             },
 
-
+            borderColor:'brown',
 
             plugins: [require('@tailwindcss/forms'), require('flowbite/plugin')],
         }

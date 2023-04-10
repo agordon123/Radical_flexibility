@@ -7,7 +7,7 @@ class ShippingAddress extends Model
 {
     protected $connection = 'mysqli';
     protected $fillable = [
-        'donor_id',
+        'customer_id',
         'name',
         'address1',
         'address2',
@@ -17,9 +17,9 @@ class ShippingAddress extends Model
         'postal_code'
     ];
 
-    public function donor()
+    public function customer()
     {
-        return $this->belongsTo(Donor::class);
+        return $this->belongsTo(Customer::class);
     }
     public function order()
     {

@@ -6,7 +6,7 @@ use Stripe\Webhook;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Stripe\Exception\SignatureVerificationException;
-
+use Stripe\WebhookEndpoint;
 class StripeWebhookController extends Controller
 {
     /**
@@ -22,7 +22,7 @@ class StripeWebhookController extends Controller
         try {
             $event = Webhook::constructEvent($payload, $sig_header, config('services.stripe.webhook_secret'));
         } catch (SignatureVerificationException $e) {
-            return response()->json(['error' => 'Invalid signature'], 400);
+            return response()->json(['error' => $e], 400);
         }
 
         // Handle the event
@@ -33,6 +33,10 @@ class StripeWebhookController extends Controller
             case 'payment_intent.payment_failed':
                 // Handle payment intent payment failed event
                 break;
+                case 'payment_link_created':
+                    break;
+                    case 'payment_intent.canceled';
+                    break;
             // Handle other event types as needed
             default:
                 // Unexpected event type

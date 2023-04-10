@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -24,7 +25,9 @@ class UserController extends Controller
     }
     public function show(Request $request)
     {
-
+        $validatedData = Validator::validate([$request->all(),
+        'name'=>'required|string',
+        'email'=>'required|email']);
     }
     public function update(Request $request)
     {
@@ -32,6 +35,9 @@ class UserController extends Controller
     }
     public function delete(Request $request)
     {
-
+        $userId = $request->id;
+        $user = User::findOrFail($userId);
+        $user->delete();
+        return Inertia::location('/');
     }
 }

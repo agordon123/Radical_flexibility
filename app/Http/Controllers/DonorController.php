@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donor;
-use Illuminate\Auth\Events\Validated;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

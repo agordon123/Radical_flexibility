@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\DonationController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\StripeWebhookController;
 
 
@@ -13,11 +13,10 @@ use App\Http\Controllers\StripeWebhookController;
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 
 // Donation page
-Route::get('/donate', [PageController::class, 'donate'])->name('donate');
 
 
 // Donation confirmation page
-Route::get('/donate/thank-you', [PageController::class, 'donationConfirmation'])->name('donationConfirmation');
+Route::get('/thank-you', [PageController::class, 'donationConfirmation'])->name('donationConfirmation');
 
 Route::get('/payments', [PaymentController::class, 'index'])
     ->name('payments.index');
@@ -43,9 +42,41 @@ Route::get('/paintings', PaintingController::class)->name('paintings.index');
 
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->middleware('stripe.webhook');
+Route::middleware(['stripe.webhook'])->group(function(){
+    Route::post('/create-checkout-session', function (Request $request) {
+        \Stripe\Stripe::setApiKey(env('STRIPE_PUBLIC_KEY'));
 
+        $price = $request->input('price');
+
+        $product = \Stripe\Product::create([
+            'name' => 'Painting',
+        ]);
+
+        $price = \Stripe\Price::create([
+            'unit_amount' => $price * 100, // Price is in cents, so multiply by 100
+            'currency' => 'usd',
+            'product' => $product->id,
+        ]);
+
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [
+                [
+                    'price' => $price->id,
+                    'quantity' => 1,
+                ],
+            ],
+            'mode' => 'payment',
+            'success_url' => 'https://example.com/success',
+            'cancel_url' => 'https://example.com/cancel',
+        ]);
+
+        return response()->json(['sessionId' => $session->id]);
+    });
+});
 Route::middleware(['web'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/about', [PageController::class, 'about'])->name('about');
     Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
 });
+

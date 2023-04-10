@@ -1,20 +1,27 @@
 <template>
-    <div class="stripe-buy-button">
+    <div class="bg-primary">
+        <Button color="text-accent">
 
-
-<stripe-buy-button
-  buy-button-id="buy_btn_1Mu1hBDxs152QbBrO6uYYxeT"
-  publishable-key="pk_test_51Mmj2MDxs152QbBr97fqNjqKtSUEyafFaoNgfip4Uj2fwepJ5vnxcutN6GEXPGGq2Ydv9D5vuBIbs1fwmncclwSn00BFSCTNFs"
->
-</stripe-buy-button>
+        </Button>
     </div>
 </template>
 <script setup>
-import { Button } from 'flowbite-vue';
-defineProps({
-    buyButtonId:String,
-    publishableKey:String,
-    type:String,
-    href:String
-})
+import { Button } from "flowbite-vue";
+import { defineComponent } from "vue";
+
+defineComponent('DonationButton',{
+    type:"submit",
+    components:Button,
+    props:props,
+    color:"primary",
+
+
+});
+
+const props =defineProps({
+    buyButtonId: String,
+    publishableKey: String,
+    type: String,
+    href: String,
+});
 </script>

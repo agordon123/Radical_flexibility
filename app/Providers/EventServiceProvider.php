@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        'Stripe\PaymentIntentCreated' => [
+            'App\Listeners\PaymentIntentCreatedListener',
+        ],
+        'Stripe\PaymentIntentUpdated' => [
+            'App\Listeners\PaymentIntentUpdatedListener',
+        ],
     ];
 
     /**

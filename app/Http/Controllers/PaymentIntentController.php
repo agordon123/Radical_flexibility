@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Stripe\Stripe;
 use App\Models\Payment;
 use Inertia\Controller;
-use App\Models\Painting;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use Stripe\Exception\CardException;
@@ -64,33 +63,12 @@ class PaymentIntentController extends Controller
         return view('payments.index', compact('payments'));
     }
 
-    public function create()
-    {
-        $paintings = Painting::all();
-        return view('payments.create', compact('paintings'));
-    }
 
 
-    public function edit(Payment $payment)
-    {
-        $paintings = Painting::all();
-        return view('payments.edit', compact('payment', 'paintings'));
-    }
 
-    public function update(Request $request, Payment $payment)
-    {
-        $validatedData = $request->validate([
-            'painting_id' => 'required',
-            'amount' => 'required|numeric',
-            'currency' => 'required',
-            'payment_method' => 'required',
-        ]);
 
-        $payment->update($validatedData);
 
-        return redirect()->route('payments.index')
-            ->with('success', 'Payment updated successfully.');
-    }
+
 
     public function destroy(Payment $payment)
     {

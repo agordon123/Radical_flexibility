@@ -18,7 +18,7 @@ class StripeWebhookMiddleware
         try {
             $event = Webhook::constructEvent($payload, $sigHeader, $secret);
         } catch (SignatureVerificationException $e) {
-            return response()->json(['error' => 'Invalid signature'], 400);
+            return response()->json(['error' => 'Invalid signature','message'=>$e], 400);
         }
 
         $request->attributes->add(['stripe_event' => $event]);
