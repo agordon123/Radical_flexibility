@@ -3,27 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Laravel\Cashier\Billable;
-
-class Customer extends Model
+use \Stripe\Customer as StripeCustomer;
+class Customer extends StripeCustomer
 {
-    use HasFactory;
-    use Billable;
-    protected $guarded = [];
-    protected $fillable = ['name', 'Address', 'description', 'email', 'metadata', 'payment_method', 'phone', 'shipping'];
-    protected $casts = [
-        'name' => 'string',
-        'Address' => 'json',
-        'description' => 'string',
-        'email' => 'string',
-        'metadata' => 'json',
-        'payment_method' => 'string',
-        'phone' => 'string',
-        'shipping' => 'json'
+    use HasFactory, Billable;
+
+    protected $fillable = [
+
+        'address',
+        'metadata',
+        'phone',
+        'name',
+        'email',
+        'stripe_id',
+        'card_brand',
+        'card_last_four',
     ];
-    public function shippingAddresses()
-    {
-        return $this->hasOne(ShippingAddress::class,'id','customer_id');
-    }
+
+    protected $hidden = [
+        'card_brand',
+        'card_last_four',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'trial_ends_at' => 'datetime',
+        'subscription_ends_at' => 'datetime',
+    ];
+
 }

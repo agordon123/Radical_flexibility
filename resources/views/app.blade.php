@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
-    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <script async src="https://js.stripe.com/v3"></script>
 
 
     <script src="https://kit.fontawesome.com/5f9892f3da.js" crossorigin="anonymous"></script>
@@ -20,7 +20,7 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased bg-white">
+<body class="font-sans antialiased bg-yellow-200">
     @inertia
 
 </body>

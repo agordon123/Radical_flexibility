@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-3 gap-12">
    <PaintingCard />
     </div>
 </template>

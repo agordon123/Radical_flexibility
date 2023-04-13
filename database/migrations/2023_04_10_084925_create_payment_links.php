@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('payment_links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('painting_id')->references('id')->on('paintings');
-            $table->string('filename');
-            $table->timestamps();
+            $table->string('link_id');
+            $table->date('created');
+            $table->boolean('active');
+            $table->string('currency');
+            $table->string('url');
+            $table->string('name');
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('payment_links');
     }
 };

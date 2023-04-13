@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Stripe\Webhook;
+use Stripe\WebhookEndpoint;
+
 
 class StripeWebhookRequest extends FormRequest
 {
@@ -22,7 +25,7 @@ class StripeWebhookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            WebhookEndpoint::create()
         ];
     }
 }

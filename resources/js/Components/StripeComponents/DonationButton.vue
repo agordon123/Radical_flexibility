@@ -1,14 +1,14 @@
 <template>
     <div class="bg-primary">
         <Button color="text-accent">
-
+            <Link :href="href" />
         </Button>
     </div>
 </template>
 <script setup>
 import { Button } from "flowbite-vue";
 import { defineComponent } from "vue";
-
+import { Link } from "@inertiajs/vue3";
 defineComponent('DonationButton',{
     type:"submit",
     components:Button,

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
-
+use Stripe\Service;
 return [
 
     /*
@@ -194,7 +194,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Inertia\ServiceProvider::class
+        Inertia\ServiceProvider::class,
+
 
 
     ],

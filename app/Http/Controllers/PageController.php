@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Psr7\Request;
 use Inertia\Inertia;
 
 class PageController extends Controller
 {
-    public function home()
-    {
-        return Inertia::render('Home/HomePage',['title'=>'Home','layout'=>'Layout']);
-    }
-
     public function about()
     {
         return Inertia::render('About');
@@ -30,15 +26,9 @@ class PageController extends Controller
     {
         return Inertia::render('Donate');
     }
-
-    public function processDonation()
+    public function checkout(Request $request)
     {
-        // Process the donation and redirect to a confirmation page
-        return redirect()->route('donationConfirmation');
+        
     }
 
-    public function donationConfirmation()
-    {
-        return Inertia::render('DonationConfirmation');
-    }
 }

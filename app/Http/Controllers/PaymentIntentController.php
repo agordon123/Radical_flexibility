@@ -7,10 +7,18 @@ use App\Models\Payment;
 use Inertia\Controller;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Stripe\Exception\CardException;
 
 class PaymentIntentController extends Controller
 {
+
+    public function index()
+    {
+        $stripeSecret = Stripe::setApiKey(config('services.stripe.secret'));
+        $stripePublic = Stripe::setApiKey(config('services.stripe.key'));
+        Inertia::render('Donate',['stripeSecret'=>$stripeSecret,'stripePublic'=>$stripePublic]);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -57,11 +65,7 @@ class PaymentIntentController extends Controller
             ]);
         }
     }
-        public function index()
-    {
-        $payments = Payment::all();
-        return view('payments.index', compact('payments'));
-    }
+
 
 
 

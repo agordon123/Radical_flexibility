@@ -21,6 +21,7 @@
         "@flavorly/vanilla-components-inertia": "^0.7.42",
         "@heroicons/vue": "^2.0.16",
         "@stripe/stripe-js": "^1.50.0",
+        "@vue-stripe/vue-stripe": "^4.5.0",
         "@vueuse/core": "^9.13.0",
         "flowbite": "^1.6.4",
         "flowbite-vue": "^0.0.10",

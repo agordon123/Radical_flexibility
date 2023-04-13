@@ -6,6 +6,8 @@ use Stripe\Stripe;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentLink;
+use Inertia\Inertia;
 
 class PaymentLinkController extends Controller
 {
@@ -38,14 +40,20 @@ class PaymentLinkController extends Controller
                     ],
                 ],
                 'mode' => 'payment',
-                'success_url' => env('APP_URL') || '/success',
-                'cancel_url' => 'https://example.com/cancel',
+                'success_url' => env('NGROK_URL') || '/success',
+                'cancel_url' => '/cancel',
             ]);
         }
         // Get the amount and currency from the request
 
 
         // Return the payment link URL to the client
-        return response()->json(['url' => $session->url]);
+        return Inertia::render('Checkout',['url' => $session->url]);
+    }
+    public function index()
+    {
+        $links = PaymentLink::all();
+
+        return  response()->json(['paymentLinks',$links],200);
     }
 }

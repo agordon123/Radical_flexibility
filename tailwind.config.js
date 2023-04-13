@@ -1,5 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-
+const colors = require('tailwindcss/colors')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
@@ -14,7 +14,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sansSerif:['Verlag','sans-serif'],
             },
 
             backgroundColor: {
@@ -27,7 +27,13 @@ module.exports = {
                 'secondary': '#70442c', // your secondary text color
                 'accent': '#d0c4a4',
             },
-
+            colors: {
+                gray: colors.gray,
+                blue: colors.sky,
+                red: colors.rose,
+                pink: colors.fuchsia,
+                yellow:colors.yellow
+              },
             borderColor:'brown',
 
             plugins: [require('@tailwindcss/forms'), require('flowbite/plugin')],

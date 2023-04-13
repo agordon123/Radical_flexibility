@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Painting;
+use Stripe\Stripe;
 use Inertia\Inertia;
+use App\Models\Painting;
+use App\Models\PaymentLink;
 
 class HomeController extends Controller
 {
@@ -11,7 +13,9 @@ class HomeController extends Controller
     public function index()
     {
         $paints = Painting::all();
-        return Inertia::render('Home', ['paintings' => $paints]);
+        $paymentLinks = PaymentLink::all();
+        $stripeKey = Stripe::setApiKey(config('services.stripe.key'));
+        return Inertia::render('Home', ['paintings' => $paints,'paymentLinks'=>$paymentLinks,'stripeKey'=>$stripeKey]);
     }
 
 }

@@ -1,31 +1,25 @@
 <template #default>
-    <form @submit.prevent="handleSubmit">
-        <label>Email Address</label>
-        <input type="email" v-model="email" />
-
-        <label>Donation Amount</label>
-        <input type="number" v-model="amount" />
-
-        <label>Currency</label>
-        <select v-model="currency">
-            <option value="usd">USD</option>
-            <option value="eur">EUR</option>
-            <option value="gbp">GBP</option>
-        </select>
-
-        <button @click="handleCheckout">Submit Donation</button>
-    </form>
+    <form id="payment-form" data-secret="<?= $intent->client_secret ?>">
+        <div id="payment-element">
+          <!-- Elements will create form elements here -->
+        </div>
+        </form>
 </template>
 
 <script setup>
-import { reactive } from "vue";
 import { ref } from "vue";
 import { loadStripe } from "@stripe/stripe-js";
+import { useForm } from "@inertiajs/vue3";
+import {StripeCheckout  } from '@vue-stripe/vue-stripe'
 
 const email = ref("");
 const amount = ref(0);
 const currency = ref("usd");
-
+const { data, post, processing, errors, reset } = useForm({
+      name: '',
+      email: '',
+      card: null,
+    });
 const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_KEY);
 
 const handleCheckout = async () => {

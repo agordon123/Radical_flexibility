@@ -6,7 +6,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import i18n from "./i18n/i18n";
 import { loadStripe } from "@stripe/stripe-js";
-const stripe = loadStripe('pk_test_zzKy23dHuIRdZwSxirMk8Vba00EM4kHMs8')
+const stripe = loadStripe("pk_test_51Mmj2MDxs152QbBr97fqNjqKtSUEyafFaoNgfip4Uj2fwepJ5vnxcutN6GEXPGGq2Ydv9D5vuBIbs1fwmncclwSn00BFSCTNFs");
 const appName =
     window.document.getElementsByTagName("title")[0]?.innerText ||
     "Radical Flexibility";

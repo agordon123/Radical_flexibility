@@ -36,7 +36,7 @@ class PaintingController extends Controller
         return redirect()->back()->with('success', 'Image saved successfully.');
     }
     public function show($id){
-        $painting = Painting::findOrFail($id);
+        $painting = Painting::where('slug', $id)->firstOrFail();
 
         return Inertia::render('Paintings/{id}',['painting'=>$painting]);
     }
@@ -45,6 +45,7 @@ class PaintingController extends Controller
 
         ]);
     }
+
 
 
 }

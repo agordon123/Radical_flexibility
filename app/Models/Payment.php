@@ -2,28 +2,34 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Money\Currency;
+use App\Models\Order;
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Payment extends Model
 {
     use HasFactory;
-    protected $connection = 'mysqli';
+
     protected $fillable = [
-        'donor_id',
-        'donation_id',
+        'payment_id',
+        'customer_id',
         'order_id',
         'payment_intent_id',
+        'status',
         'amount',
         'currency',
         'payment_type',
         'description',
         'stripe_charge_id'
     ];
+    protected $casts = [
 
-    public function donor()
+    ];
+    public function customer()
     {
-        return $this->belongsTo(Donor::class);
+        return $this->belongsTo(Customer::class);
     }
     public function currency()
     {
@@ -31,6 +37,6 @@ class Payment extends Model
     }
     public function orders()
     {
-        return $this->hasMany('orders');
+        return $this->hasMany(Order::class);
     }
 }

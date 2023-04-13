@@ -1,17 +1,19 @@
 <!-- resources/js/Components/PaintingCard.vue -->
+<template>
 
+</template>
 
 
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import { computed, defineAsyncComponent, ref } from "vue";
-defineAsyncComponent('Painting',{
+defineAsyncComponent({
     props: props,
     painting: Object ,
 
 });
 
-const paintings = computed(() => usePage().props.paintings);
+
 
 const props = defineProps(['painting']);
 const buyPainting = () => {

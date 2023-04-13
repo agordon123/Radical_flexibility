@@ -1,41 +1,42 @@
 <template>
     <div class="flex items-center justify-center">
         <form id="payment-form">
-      <div id="link-authentication-element">
-        <!--Stripe.js injects the Link Authentication Element-->
-      </div>
-      <div id="payment-element">
-        <!--Stripe.js injects the Payment Element-->
-      </div>
-      <button id="submit">
-        <div class="spinner hidden" id="spinner"></div>
-        <span id="button-text">Pay now</span>
-      </button>
-      <div id="payment-message" class="hidden"></div>
-    </form>
+            <div id="link-authentication-element">
+                <!--Stripe.js injects the Link Authentication Element-->
+            </div>
+            <div id="payment-element">
+                <!--Stripe.js injects the Payment Element-->
+            </div>
+            <button id="submit">
+                <div class="spinner hidden" id="spinner"></div>
+                <span id="button-text">Pay now</span>
+            </button>
+            <div id="payment-message" class="hidden"></div>
+        </form>
     </div>
 </template>
 
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import { loadStripe} from '@stripe/stripe-js';
-import stripe from '@/stripe';
-import { computed } from 'vue';
-const initStripe = computed(async()=> loadStripe(process.env.VITE_STRIPE_KEY));
+import { loadStripe,StripePaymentElement} from '@stripe/stripe-js';
+import Stripe from 'stripe';
+import { computed, onMounted } from 'vue';
+onMounted(()=>loadStripe("pk_test_51Mmj2MDxs152QbBr97fqNjqKtSUEyafFaoNgfip4Uj2fwepJ5vnxcutN6GEXPGGq2Ydv9D5vuBIbs1fwmncclwSn00BFSCTNFs",Stripe))
 
-const elements = stripe.elements
+
+const elements = initStripe.elements('card',)
 const props = defineProps({
     stripe:Object,
 
 })
 </script>
-
+<style>
 /* Variables */
 * {
     box-sizing: border-box;
-  }
+}
 
-  body {
+body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -44,36 +45,37 @@ const props = defineProps({
     align-content: center;
     height: 100vh;
     width: 100vw;
-  }
+}
 
-  form {
+form {
     width: 30vw;
     min-width: 500px;
     align-self: center;
     box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
-      0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+        0px 2px 5px 0px rgba(50, 50, 93, 0.1),
+        0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
     border-radius: 7px;
     padding: 40px;
-  }
+}
 
-  .hidden {
+.hidden {
     display: none;
-  }
+}
 
-  #payment-message {
+#payment-message {
     color: rgb(105, 115, 134);
     font-size: 16px;
     line-height: 20px;
     padding-top: 12px;
     text-align: center;
-  }
+}
 
-  #payment-element {
+#payment-element {
     margin-bottom: 24px;
-  }
+}
 
-  /* Buttons and links */
-  button {
+/* Buttons and links */
+button {
     background: #5469d4;
     font-family: Arial, sans-serif;
     color: #ffffff;
@@ -87,22 +89,22 @@ const props = defineProps({
     transition: all 0.2s ease;
     box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
     width: 100%;
-  }
-  button:hover {
+}
+button:hover {
     filter: contrast(115%);
-  }
-  button:disabled {
+}
+button:disabled {
     opacity: 0.5;
     cursor: default;
-  }
+}
 
-  /* spinner/processing state, errors */
-  .spinner,
-  .spinner:before,
-  .spinner:after {
+/* spinner/processing state, errors */
+.spinner,
+.spinner:before,
+.spinner:after {
     border-radius: 50%;
-  }
-  .spinner {
+}
+.spinner {
     color: #ffffff;
     font-size: 22px;
     text-indent: -99999px;
@@ -114,13 +116,13 @@ const props = defineProps({
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
-  }
-  .spinner:before,
-  .spinner:after {
+}
+.spinner:before,
+.spinner:after {
     position: absolute;
     content: "";
-  }
-  .spinner:before {
+}
+.spinner:before {
     width: 10.4px;
     height: 20.4px;
     background: #5469d4;
@@ -131,8 +133,8 @@ const props = defineProps({
     transform-origin: 10.4px 10.2px;
     -webkit-animation: loading 2s infinite ease 1.5s;
     animation: loading 2s infinite ease 1.5s;
-  }
-  .spinner:after {
+}
+.spinner:after {
     width: 10.4px;
     height: 10.2px;
     background: #5469d4;
@@ -143,32 +145,33 @@ const props = defineProps({
     transform-origin: 0px 10.2px;
     -webkit-animation: loading 2s infinite ease;
     animation: loading 2s infinite ease;
-  }
+}
 
-  @-webkit-keyframes loading {
+@-webkit-keyframes loading {
     0% {
-      -webkit-transform: rotate(0deg);
-      transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  @keyframes loading {
+}
+@keyframes loading {
     0% {
-      -webkit-transform: rotate(0deg);
-      transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
     }
     100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}
 
-  @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
     form {
-      width: 80vw;
-      min-width: initial;
+        width: 80vw;
+        min-width: initial;
     }
-  }</style>
+}
+</style>

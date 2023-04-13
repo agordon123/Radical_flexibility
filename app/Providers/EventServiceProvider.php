@@ -5,8 +5,9 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
-
+use Laravel\Cashier\Events\WebhookReceived;
+use App\Listeners\PaymentIntentCreatedListener;
+use Stripe\Service\PaymentIntentService;
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -18,8 +19,13 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        'Stripe\PaymentIntentCreated' => [
-            'App\Listeners\PaymentIntentCreatedListener',
+
+            WebhookReceived::class => [
+                StripeEventListener::class,
+            ],
+
+        PaymentIntentService::class => [
+            PaymentIntentCreatedListener::class,
         ],
         'Stripe\PaymentIntentUpdated' => [
             'App\Listeners\PaymentIntentUpdatedListener',
