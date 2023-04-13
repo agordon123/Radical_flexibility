@@ -1,7 +1,8 @@
 <template>
     <div class="bg-primary">
-        <Button color="text-accent">
-            <Link :href="href" />
+        <Button color="text-accent" type="type">
+            <slot name="donation"></slot>
+
         </Button>
     </div>
 </template>
@@ -25,3 +26,6 @@ const props =defineProps({
     href: String,
 });
 </script>
+
+
+

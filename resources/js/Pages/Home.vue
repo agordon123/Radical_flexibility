@@ -59,8 +59,35 @@ import { defineComponent, computed, onMounted } from "vue";
 import { ref } from "vue";
 import PaintingSkeleton from "@/Components/Paintings/PaintingSkeleton.vue";
 import { Button } from "flowbite-vue";
+import Stripe from 'stripe'
+import { loadStripe } from "@stripe/stripe-js";
+const user = usePage().props.auth.user;
+const stripeKey =computed(usePage().props.secretKey)
+const stripe = new Stripe(stripeKey);
+const handleDonationClick = async () => {
+    const {
+        props: { sessionId },
+    } = await fetch("/create-checkout-session", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            items: [
+                {
+                    price: 0,
+                    quantity: 1,
+                },
+            ],
+        }),
+    }).then((res) => res.json());
 
-const apiKey = ref("");
+    const { error } = await stripe.redirectToCheckout({ sessionId });
+
+    if (error) {
+        console.error(error);
+    }
+};
 
 const paintingsData = computed(() => {
     return renderPaintings();

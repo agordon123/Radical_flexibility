@@ -38,7 +38,7 @@ class PaintingController extends Controller
     public function show($id){
         $painting = Painting::where('slug', $id)->firstOrFail();
 
-        return Inertia::render('Paintings/{id}',['painting'=>$painting]);
+        return Inertia::render('Paintings/{slug}',['painting'=>$painting]);
     }
     public function create(Request $request){
         $request->validate([

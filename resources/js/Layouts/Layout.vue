@@ -103,34 +103,7 @@ import { Button } from "flowbite-vue";
 import Stripe from "stripe";
 import {Link} from "@inertiajs/vue3";
 import { computed, ref } from "vue";
-import { loadStripe } from "@stripe/stripe-js";
-const user = usePage().props.auth.user;
-const stripeKey =computed(usePage().props.secretKey)
-const stripe = new Stripe(stripeKey);
-const handleCheckoutClick = async () => {
-    const {
-        props: { sessionId },
-    } = await fetch("/create-checkout-session", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            items: [
-                {
-                    price: 0,
-                    quantity: 1,
-                },
-            ],
-        }),
-    }).then((res) => res.json());
-
-    const { error } = await stripe.redirectToCheckout({ sessionId });
-
-    if (error) {
-        console.error(error);
-    }
-};
+const donationLink = ref('https://donate.stripe.com/test_14kg1V1RD7wP7u07su')
 const loading = ref(false);
 </script>
 <style>

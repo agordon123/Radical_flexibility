@@ -15,9 +15,9 @@ class PaymentIntentController extends Controller
 
     public function index()
     {
-        $stripeSecret = Stripe::setApiKey(config('services.stripe.secret'));
+
         $stripePublic = Stripe::setApiKey(config('services.stripe.key'));
-        Inertia::render('Donate',['stripeSecret'=>$stripeSecret,'stripePublic'=>$stripePublic]);
+        Inertia::render('Donate',['stripePublic'=>$stripePublic]);
     }
     /**
      * Display a listing of the resource.

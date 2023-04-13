@@ -9,9 +9,9 @@
 <script setup>
 import { ref } from "vue";
 import { loadStripe } from "@stripe/stripe-js";
-import { useForm } from "@inertiajs/vue3";
+import { useForm,usePage } from "@inertiajs/vue3";
 import {StripeCheckout  } from '@vue-stripe/vue-stripe'
-
+StripeCheckout()
 const email = ref("");
 const amount = ref(0);
 const currency = ref("usd");

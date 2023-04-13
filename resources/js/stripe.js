@@ -1,9 +1,10 @@
-import process from 'process';
 // See your keys here: https://dashboard.stripe.com/apikeys
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.VITE_STRIPE_SECRET_KEY, {
-  apiVersion: '2022-11-15',
-});
-
+import {StripeCheckout, StripeElementsPlugin,StripePlugin  } from '@vue-stripe/vue-stripe'
+const options = {
+    pk:process.env.VITE_STRIPE_KEY
+}
+const plugin = StripePlugin({PublicKeyCredential:process.env.STRIPE_KEY})
+const elements = StripeElementsPlugin({PublicKeyCredential})
 
 export default {stripe}
