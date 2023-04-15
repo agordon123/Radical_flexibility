@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Stripe\Stripe;
-use App\Models\Payment;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 use App\Http\Controllers\Controller;
@@ -81,6 +80,10 @@ class CheckoutController extends Controller
     public function createSession(Request $request)
     {
         $product =StripeProduct::find($request->input('product_id'));
+        $price = $product->price_id;
+        $currency = $product->currency;
+        $name = $product->name;
+        $product_id = $product->product_id;
 
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
@@ -98,11 +101,11 @@ class CheckoutController extends Controller
                     'quantity' => 1,
                 ],
             ],'mode' => 'payment',
-            'success_url' => env('APP_URL') . '/success?session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url' => env('APP_URL') . '/cancel',
+            'success_url' => env('VITE_NGROK_URL').'/donate/success?session_id={CHECKOUT_SESSION_ID}' . '/success?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => env('VITE_NGROK_URL').'/donate/cancel?session_id={CHECKOUT_SESSION_ID}' . '/cancel',
         ]);
 
-        return response()->json([
+        return Inertia::render([
             'id' => $session->id,
         ]);
     }

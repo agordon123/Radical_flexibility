@@ -1,7 +1,8 @@
 <template>
     <Head :title="title" />
     <Layout
-        ><template #default>
+        >
+        <template #default>
             <div
                 class="grid grid-cols-3  max-w-[80%] col-auto mx-auto 2xl:grid grid-flow-row items-center"
                 v-if="paintings"
@@ -62,32 +63,9 @@ import { Button } from "flowbite-vue";
 import Stripe from 'stripe'
 import { loadStripe } from "@stripe/stripe-js";
 const user = usePage().props.auth.user;
-const stripeKey =computed(usePage().props.secretKey)
+const stripeKey =computed(()=>usePage().props.publicKey)
 const stripe = new Stripe(stripeKey);
-const handleDonationClick = async () => {
-    const {
-        props: { sessionId },
-    } = await fetch("/create-checkout-session", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            items: [
-                {
-                    price: 0,
-                    quantity: 1,
-                },
-            ],
-        }),
-    }).then((res) => res.json());
 
-    const { error } = await stripe.redirectToCheckout({ sessionId });
-
-    if (error) {
-        console.error(error);
-    }
-};
 
 const paintingsData = computed(() => {
     return renderPaintings();
@@ -101,7 +79,7 @@ defineComponent({
     layout: Layout,
     props: {
         paintings: Array,
-        stripeKey: String,
+        publicKey: String,
         sessionId: String,
         Button,
         paymentLinks: Array,

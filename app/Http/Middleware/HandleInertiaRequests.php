@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
                 ]);
             },
             'stripe'=>[
-                ['stripe.secret' => env('STRIPE_SECRET'),'stripe.public'=>env('STRIPE_KEY')]
+                ['stripe.secret' => env('STRIPE_SECRET_KEY'),'stripe.key'=>env('STRIPE_KEY')]
             ]
         ]);
     }

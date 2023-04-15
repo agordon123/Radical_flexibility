@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('StripeProducts', function (Blueprint $table){
+        
+
+            Schema::table('StripeProducts', function (Blueprint $table){
             $table->id();
+            $table->string('price_id');
             $table->string('stripe_product_id');
             $table->string('product_name');
-            $table->decimal('price_id');
+            $table->decimal('price',10,2)->nullable();
             $table->string('currency');
         });
     }

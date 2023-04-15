@@ -21,6 +21,4 @@ Route::post('/payment-intent', [StripeController::class, 'createPaymentIntent'])
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/paymentLinks',[PaymentLinkController::class, 'StripeController@createPaymentIntent']);
-Route::get('/donate',PaymentLinkController::class)->name('donate.index');
 

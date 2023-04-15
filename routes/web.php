@@ -11,27 +11,25 @@ use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\StripeWebhookController;
 use Laravel\Cashier\Http\Middleware\VerifyWebhookSignature;
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
+Route::get('/paintings/{id?}',[PaintingController::class, 'show']);
+
 // FAQ page
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('donate.checkout');
 Route::post('/checkout/create-payment-intent', [CheckoutController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');
 // Donation page
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
 Route::get('/paintings/{id}', [PaintingController::class, 'show'])->name('painting.show');
 
-Route::get('/donate',[]);
-
-Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
-Route::get('/paintings/{id?}',[PaintingController::class, 'show']);
 
 
 
+
+Route::post('/checkout/session', [CheckoutController::class, 'createSession']);
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
     ->middleware(VerifyWebhookSignature::class);
-
-
-
 Route::middleware(['stripe.webhook'])->group(function(){
 
     Route::post('/create-checkout-session', function (Request $request) {

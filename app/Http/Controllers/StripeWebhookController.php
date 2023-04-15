@@ -17,8 +17,8 @@ class StripeWebhookController extends Controller
      */
     public function createEndpoint()
     {
-        $endpoint = new WebhookEndpoint('we_1MvIDJDxs152QbBrli3IMN6U');
-        return $endpoint;
+        $endpoint = new WebhookEndpoint('we_1MvIDJDxs152QbBrli3IMN6U',url(env('STRIPE_WEBHOOK_URL')));
+        return inertia('Home',['webHook'=>$endpoint]);
     }
     /**
      * Handle a Stripe webhook request.

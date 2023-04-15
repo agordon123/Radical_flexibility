@@ -13,8 +13,9 @@ class HomeController extends Controller
     {
         $paints = Painting::all();
         $products = StripeProduct::all();
+        $publicKey = config('services.stripe.key');
 
-        return Inertia::render('Home', ['paintings' => $paints,'products'=>$products]);
+        return Inertia::render('Home', ['paintings' => $paints,'products'=>$products,'publicKey'=>$publicKey]);
     }
 
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_links', function (Blueprint $table) {
+      /**  Schema::create('payment_links', function (Blueprint $table) {
             $table->id();
             $table->string('link_id');
             $table->date('created');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('currency');
             $table->string('url');
             $table->string('name');
-        });
+        }); * */
     }
 
     /**
