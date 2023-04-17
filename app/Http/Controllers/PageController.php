@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Psr7\Request;
 use Inertia\Inertia;
+use App\Models\Painting;
+use GuzzleHttp\Psr7\Request;
+use App\Models\StripeProduct;
+use App\Http\Controllers\Controller;
 
 class PageController extends Controller
 {
+    public function home()
+    {
+        $paints = Painting::all();
+        $products = StripeProduct::all();
+        $publicKey = config('services.stripe.key');
+
+        return Inertia::render('Home', ['paintings' => $paints,'products'=>$products,'publicKey'=>$publicKey]);
+    }
     public function about()
     {
         return Inertia::render('About');
@@ -28,7 +39,7 @@ class PageController extends Controller
     }
     public function checkout(Request $request)
     {
-        
+
     }
 
 }

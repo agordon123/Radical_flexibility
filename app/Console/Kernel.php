@@ -9,6 +9,7 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
     Commands\ProcessImages::class,
+    Commands\CreateStripeWebhookCommand::class
     ];
 
     /**
@@ -16,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('stripe:create-webhook')->daily();
     }
 
     /**

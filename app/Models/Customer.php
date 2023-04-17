@@ -31,5 +31,8 @@ class Customer extends StripeCustomer
         'trial_ends_at' => 'datetime',
         'subscription_ends_at' => 'datetime',
     ];
-
+    public function orders()
+    {
+        return $this->orders();
+    }
 }

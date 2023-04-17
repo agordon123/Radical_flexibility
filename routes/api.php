@@ -1,12 +1,10 @@
 <?php
 
-use App\Http\Controllers\PaymentLinkController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StripeController;
-use Inertia\Inertia;
 
-Route::post('/payment-intent', [StripeController::class, 'createPaymentIntent']);
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

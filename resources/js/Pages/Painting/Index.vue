@@ -1,6 +1,12 @@
 <template>
         <div class="flex align-middle justify-center" ref="paintingContainer">
+            <table class="table-auto">
+                <thead>
+                    <tr>
 
+                    </tr>
+                </thead>
+            </table>
           <h1>Checkout</h1>
           <p>Total: ${{ amount }}</p>
           <form @submit.prevent="handleSubmit">
@@ -11,9 +17,9 @@
 
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 
-const {props:{painting} } = usePage();
+const {props:{paintings} } = computed(()=> usePage())
 defineComponent({
     painting:Object,
     required:true,

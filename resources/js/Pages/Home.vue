@@ -60,31 +60,11 @@ import { defineComponent, computed, onMounted } from "vue";
 import { ref } from "vue";
 import PaintingSkeleton from "@/Components/Paintings/PaintingSkeleton.vue";
 import { Button } from "flowbite-vue";
-import Stripe from 'stripe'
-import { loadStripe } from "@stripe/stripe-js";
+const page = computed(()=> usePage());
 const user = usePage().props.auth.user;
-const stripeKey =computed(()=>usePage().props.publicKey)
-const stripe = new Stripe(stripeKey);
-
-
-const paintingsData = computed(() => {
-    return renderPaintings();
-});
-const stripeRef = ref({});
-
 const {
     props: { paintings },
 } = usePage();
-defineComponent({
-    layout: Layout,
-    props: {
-        paintings: Array,
-        publicKey: String,
-        sessionId: String,
-        Button,
-        paymentLinks: Array,
-    },
-});
 const paintingContainer = ref({});
 const paymentLinkContainer = ref({});
 const renderPaintings = () => {
@@ -96,6 +76,24 @@ const renderPaintings = () => {
     }
     console.log(paintingContainer, paymentLinkContainer);
 };
+
+
+
+
+
+
+defineComponent({
+    layout: Layout,
+    props: {
+        paintings: Array,
+        publishableKey: String,
+        sessionId: String,
+        Button,
+        products:Array
+    },
+});
+
+
 const handleCheckoutClick = async (price, id) => {
     const {
         props: { sessionId },

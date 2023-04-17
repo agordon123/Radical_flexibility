@@ -2,9 +2,8 @@
 
 namespace App\Listeners;
 
-
-use Laravel\Cashier\Events\WebhookReceived;
-use Stripe\Event;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
 class StripeEventListener
 {
@@ -19,9 +18,8 @@ class StripeEventListener
     /**
      * Handle the event.
      */
-    public function handle($event): void
+    public function handle(object $event): void
     {
-        $data = $event->data->object;
-        dd($data);
+        //
     }
 }

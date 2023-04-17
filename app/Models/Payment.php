@@ -25,7 +25,11 @@ class Payment extends Model
         'stripe_charge_id'
     ];
     protected $casts = [
-
+        'payment_id' => 'string',
+        'customer_id' => 'integer',
+        'order_id'=> 'integer',
+        'amount'=>'decimal',
+        'currency'=>'string'
     ];
     public function customer()
     {

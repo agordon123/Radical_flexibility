@@ -11,7 +11,7 @@ class CheckoutRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'product_id'=>'string|required',
+            'price_id'=>'string|required'
+
         ];
     }
 }

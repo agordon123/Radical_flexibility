@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class StripeProduct extends Model
 {
     use HasFactory;
-    protected $fillable  = ['stripe_product_id','stripe_product_name','price_id','currency'];
+    protected $fillable  = ['stripe_product_id','stripe_product_name','price_id','currency','plink_id'];
     protected $table = 'StripeProducts';
 
     public function orders()

@@ -8,24 +8,24 @@
                     class="h-[80%] w-20 text-secondary font-extrabold"
                 />
                 <h1
-                    class="text-5xl font-bold ml-10 text-secondary drop-shadow-lg font-ui-sans-serif"
+                    class="text-5xl font-bold ml-10 text-secondary drop-shadow-lg font-ui-sans-serif underline"
                 >
                     Radical Flexibility Fund
                 </h1>
                 <div class="mx-20 text-xl bold bg-secondary">
-
-                    <Link href="/donate/checkout">
+                    <form
+                        action="POST"
+                        @submit.prevent="form.post('/create-checkout-session')"
+                    >
                         <Button
                             id="checkout-button"
                             class="bg-primary hover:bg-secondary w-[200px]"
                             size="xl"
                             background="bg-primary"
-                            @click="handleDonationClick"
-                            @click.prevent="loading"
                             type="submit"
                             >DONATE NOW</Button
                         >
-                    </Link>
+                    </form>
                 </div>
                 <div>
                     <a href="https://instagram.com/radicalflexibility"
@@ -35,13 +35,13 @@
                         ></i></a
                     ><span class="px-4">Check Out our Instagram!</span>
                 </div>
+                <div class="float-right"><Link href="/login">
+                </Link></div>
             </div>
             <nav
-                class="bg-primary py-2 shadow-md mt-10 rounded-lg drop-shadow-lg font-serif"
+                class="bg-primary py-2 shadow-md mt-10 rounded-lg drop-shadow-lg"
             >
-                <ul
-                    class="flex justify-between space-x-4 ml-4 mr-4 text-primary"
-                >
+                <ul class="flex justify-between space-x-4 ml-4 mr-4">
                     <li>
                         <NavLink
                             href="/"
@@ -92,29 +92,64 @@
 <script setup>
 import ApplicationLogoVue from "@/Components/UI/ApplicationLogo.vue";
 import NavLink from "@/Components/UI/NavLink.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { Button } from "flowbite-vue";
-const handleDonationClick = async () => {
+import { defineComponent, onMounted,computed } from "vue";
+defineComponent({
+    ApplicationLogoVue,
+    NavLink,
+    Link,
+    Button,
+});
+const page = computed(()=>usePage());
+
+const logProducts = ()=>{
+    page.props.products.forEach(element => {
+        console.log(element);
+    });
+}
+
+
+defineEmits(["handleDonationClick", "createCheckoutSession","submit","logProducts"]);
+//onMounted(()=>);
+defineProps({ sessionId: Object, products: Array });
+
+const submit = async () => {
     const {
         props: { sessionId },
-    } = await fetch("/create-checkout-session", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            items: [
-                {
-                    price: 0,
-                    quantity: 1,
-                },
-            ],
-        }),
-    }).then((res) => res.json());
+    } = await form
+        .post("/create-checkout-session", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                items: [
+                    {
+                        price: 0,
+                        quantity: 1,
+                    },
+                ],
+            }),
+        })
+        .then((res) => res.json());
 
     const { error } = await stripe.redirectToCheckout({ sessionId });
 
     if (error) {
+        console.error(error);
+    }
+};
+const createCheckoutSession = async (product_id) => {
+    try {
+        const response = await axios.post("/create-checkout-session", {
+            price: props.price,
+        });
+
+        const sessionId = response.data.sessionId;
+
+        window.location.href = `/checkout/${sessionId}`;
+    } catch (error) {
         console.error(error);
     }
 };

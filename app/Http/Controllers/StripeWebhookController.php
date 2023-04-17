@@ -3,28 +3,35 @@
 namespace App\Http\Controllers;
 
 use Stripe\Webhook;
-use Inertia\Inertia;
+use Stripe\StripeClient;
 use Stripe\WebhookEndpoint;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Stripe\Exception\SignatureVerificationException;
 use Illuminate\Support\Facades\Log;
+use App\Events\WebhookEndpointCreated;
+use Stripe\Exception\SignatureVerificationException;
+use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
-class StripeWebhookController extends Controller
+class StripeWebhookController extends CashierController
 {
     /**
      * Display a listing of the resource.
      */
     public function createEndpoint()
     {
-        $endpoint = new WebhookEndpoint('we_1MvIDJDxs152QbBrli3IMN6U',url(env('STRIPE_WEBHOOK_URL')));
-        return inertia('Home',['webHook'=>$endpoint]);
+        $url = 'http://localhost:8000' . '/stripe/webhook';
+        $endpoint = WebhookEndpoint::create([
+            'url' => $url,
+            'enabled_events' => ['*'],
+            // additional configuration options as needed
+        ]);
+        return response()->json($endpoint);
     }
     /**
      * Handle a Stripe webhook request.
      */
     public function handleWebhook(Request $request)
     {
+        $stripe = new StripeClient(config('stripe.secret'));
         $payload = $request->getContent();
         $sigHeader = $request->server('STRIPE_SIGNATURE');
 
@@ -46,7 +53,9 @@ class StripeWebhookController extends Controller
             case 'payment_intent.failed':
                 $this->paymentFailed($event->data->object);
                 break;
-            // Handle other events as needed
+            case 'charge_succeeded':
+                $this->paymentSucceeded($event->data->object);
+                // Handle other events as needed
             default:
                 // Ignore unsupported events
                 break;
@@ -59,12 +68,19 @@ class StripeWebhookController extends Controller
     {
         $payment = $paymentIntent;
         dd($payment);
-
     }
 
     protected function paymentFailed($paymentIntent)
     {
         $payment = $paymentIntent;
         dd($payment);
+    }
+    protected function createWebhook()
+    {
+        $this->createEndpoint();
+        event(new WebhookEndpointCreated());
+
+        // Return a response to the user
+        return response('Webhook endpoint created successfully');
     }
 }

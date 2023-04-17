@@ -8,6 +8,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Laravel\Cashier\Events\WebhookReceived;
 use App\Listeners\PaymentIntentCreatedListener;
 use Stripe\Service\PaymentIntentService;
+use Stripe\Service\WebhookEndpointService;
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -27,8 +28,11 @@ class EventServiceProvider extends ServiceProvider
         PaymentIntentService::class => [
             PaymentIntentCreatedListener::class,
         ],
-        'Stripe\PaymentIntentUpdated' => [
-            'App\Listeners\PaymentIntentUpdatedListener',
+        WebhookEndpointService::class =>[
+            WebhookReceived::class
+        ],
+        'App\Events\WebhookEndpointCreated' => [
+            'App\Listeners\CreateWebhookEndpoint',
         ],
     ];
 
