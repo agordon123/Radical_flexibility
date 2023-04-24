@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\StripeClient;
 use Stripe\WebhookEndpoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Events\WebhookEndpointCreated;
+use Stripe\Service\WebhookEndpointService;
 use Stripe\Exception\SignatureVerificationException;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
+use Stripe\Checkout\Session;
 
 class StripeWebhookController extends CashierController
 {
@@ -18,12 +20,22 @@ class StripeWebhookController extends CashierController
      */
     public function createEndpoint()
     {
+
         $url = 'http://localhost:8000' . '/stripe/webhook';
+        $stripe = new StripeClient(config('services.stripe.key'));
+        $webhookEndpointService = new WebhookEndpointService($stripe);
+        $webhookEndpoint = $webhookEndpointService->create([
+                    'url' => 'https://example.com/stripe/webhook',
+                    'enabled_events' => ['*'],
+                    // additional configuration options as needed
+                                                            ]);
+
         $endpoint = WebhookEndpoint::create([
             'url' => $url,
             'enabled_events' => ['*'],
             // additional configuration options as needed
         ]);
+        $endpoint->save();
         return response()->json($endpoint);
     }
     /**
@@ -56,6 +68,11 @@ class StripeWebhookController extends CashierController
             case 'charge_succeeded':
                 $this->paymentSucceeded($event->data->object);
                 // Handle other events as needed
+                break;
+                case 'checkout.session.completed':
+                    $session = Session::retrieve($event->data->object);
+                    case 'checkout.session.async_payment_succeeded':
+                    break;
             default:
                 // Ignore unsupported events
                 break;
@@ -78,9 +95,12 @@ class StripeWebhookController extends CashierController
     protected function createWebhook()
     {
         $this->createEndpoint();
-        event(new WebhookEndpointCreated());
+
 
         // Return a response to the user
         return response('Webhook endpoint created successfully');
+    }
+    protected function sessionCompleted(){
+
     }
 }

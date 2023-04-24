@@ -22,8 +22,7 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id'=>'string|required',
-            'price_id'=>'string|required'
+            'price_id'=>'string|required','product_id'=>'string|required'
 
         ];
     }

@@ -5,8 +5,7 @@ namespace App\Http\Requests;
 use App\Listeners\StripeEventListener;
 use Illuminate\Foundation\Http\FormRequest;
 use Laravel\Cashier\Events\WebhookReceived;
-use Stripe\Webhook;
-use Stripe\WebhookEndpoint;
+
 
 
 class StripeWebhookRequest extends FormRequest
@@ -28,7 +27,8 @@ class StripeWebhookRequest extends FormRequest
     {
         return [
             $event = StripeEventListener::class,
-            WebhookReceived::dispatch($event)
+            WebhookReceived::dispatch($event),
+            dd($event)
         ];
     }
 }

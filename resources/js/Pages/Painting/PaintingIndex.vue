@@ -1,4 +1,4 @@
-<template>
+<template v-model="painting">
         <div class="flex align-middle justify-center" ref="paintingContainer">
             <table class="table-auto">
                 <thead>
@@ -17,9 +17,11 @@
 
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-import { computed, defineComponent, ref } from "vue";
-
-const {props:{paintings} } = computed(()=> usePage())
+import route from "vendor/tightenco/ziggy/src/js";
+import { computed, defineComponent, ref,unref } from "vue";
+app.config.globalProperties.route = route
+const {props:{painting} } = computed(()=> usePage())
+console.log(paintings.value)
 defineComponent({
     painting:Object,
     required:true,

@@ -1,20 +1,20 @@
-<template>
+<template v-model="painting.product">
     <div class="bg-primary">
-        <form>
-        <Button color="text-accent" type="type">
-            <slot name="donation"></slot>
+        <form method="post" :v-model="form" action="createDonationCheckoutSession">
+<PrimaryButton :type="submit" @click="submit" >
 
-        </Button>
-    </form>
+</PrimaryButton>
+</form>
     </div>
 </template>
 <script setup>
+import PrimaryButton from "../UI/PrimaryButton.vue";
 import { Button } from "flowbite-vue";
-import { defineComponent } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { defineComponent,computed } from "vue";
+import { Link, useForm, usePage } from "@inertiajs/vue3";
 defineComponent({
     type:"submit",
-    components:Button,
+    components:PrimaryButton,
     props:props,
     color:"primary",
 
@@ -24,12 +24,11 @@ defineComponent({
 const createDonationCheckoutSession = async(productID)=>{
 
 }
-const emits = defineEmits([])
+const {painting:{product:{product_id}}} = computed(()=>usePage().props)
+const form = useForm()
+const emits = defineEmits(['submit']);
 const props =defineProps({
-    buyButtonId: String,
-    publishableKey: String,
-    type: String,
-    href: String,
+
 });
 </script>
 

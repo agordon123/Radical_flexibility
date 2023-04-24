@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Product;
 use App\Models\Painting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
+use App\Repositories\PaintingRepository;
 
 class PaintingController extends Controller
 {
@@ -35,8 +37,10 @@ class PaintingController extends Controller
 
         return redirect()->back()->with('success', 'Image saved successfully.');
     }
-    public function show($id){
-        $painting = Painting::where('id'== $id)->firstOrFail();
+    public function show(PaintingRepository $id){
+
+        $painting = Painting::find($id);
+        $product =Product::find($painting->product_id);
 
         return Inertia::render('Paintings/{id}',['painting'=>$painting]);
     }

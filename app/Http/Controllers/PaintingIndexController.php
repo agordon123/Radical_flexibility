@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Painting;
+
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class PaintingIndexController extends Controller
@@ -12,7 +13,11 @@ class PaintingIndexController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $paintings = Painting::all();
-        return Inertia::render('Home',['paintings'=>$paintings]);
+        $paintings = Painting::with('product')->get();
+        foreach ($paintings as $painting) {
+            $product = $painting->product;
+            $painting->attach( $product->product_id);
+        }
+        return Inertia::render('PaintingCard',['paintings'=>$paintings]);
     }
 }

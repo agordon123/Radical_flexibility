@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Donor extends Model
 {
 
-    protected $connection = 'mysqli';
+  
     protected $fillable = [
         'name',
         'email',

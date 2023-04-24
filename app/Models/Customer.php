@@ -7,7 +7,7 @@ use Laravel\Cashier\Billable;
 use \Stripe\Customer as StripeCustomer;
 class Customer extends StripeCustomer
 {
-    use HasFactory, Billable;
+    use HasFactory; use Billable;
 
     protected $fillable = [
 
@@ -33,6 +33,5 @@ class Customer extends StripeCustomer
     ];
     public function orders()
     {
-        return $this->orders();
     }
 }

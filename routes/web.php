@@ -1,34 +1,34 @@
 <?php
 
 
+use Stripe\Price;
+use Stripe\Stripe;
+use Stripe\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\StripeWebhookController;
-use Laravel\Cashier\Http\Middleware\VerifyWebhookSignature;
+use Laravel\Cashier\Http\Controllers\WebhookController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
-Route::get('/paintings/{id}', [PaintingController::class, 'show']);
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('donate.checkout');
-Route::post('/checkout/create-payment-intent', [CheckoutController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');
+Route::get('/checkout', [CheckoutController::class, 'index']);
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
-Route::get('/paintings/{id}', [PaintingController::class, 'show'])->name('painting.show');
+Route::get('/painting/{painting}', [PaintingController::class, 'show'])->name('painting.show');
+
+Route::post('/donate/checkout',DonationController::class)->name('donate.checkout');
+Route::get('/create-webhook', [StripeWebhookController::class, 'createWebhook']);
 
 
-
-
-
-Route::post('/checkout/session', [CheckoutController::class, 'createSession']);
-Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
-    ->middleware(VerifyWebhookSignature::class);
-Route::post('/donate/checkout',[CheckoutController::class, 'CheckoutController@createDonationCheckoutSession'])->name('donate.checkout');
+Route::post('/painting/checkout', [CheckoutController::class, 'createSession'])->name('painting.checkout');
+Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
 
 /*Route::post('/create-checkout-session', function (Request $request) {
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));

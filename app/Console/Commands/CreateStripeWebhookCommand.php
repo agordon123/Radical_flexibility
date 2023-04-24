@@ -30,7 +30,7 @@ class CreateStripeWebhookCommand extends Command
     public function handle(): void
     {
         $stripeClient = new StripeClient(config('services.stripe.secret'));
-        $stripeClient->webhookEndpoints;
+        $stripeClient->webhookEndpoints->create();
 
     }
 }

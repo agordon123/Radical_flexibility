@@ -1,53 +1,15 @@
 <template>
     <Head :title="title" />
-    <Layout
-        >
+    <Layout>
         <template #default>
             <div
-                class="grid grid-cols-3  max-w-[80%] col-auto mx-auto 2xl:grid grid-flow-row items-center"
+                class="grid grid-cols-3 max-w-[80%] col-auto mx-auto 2xl:grid grid-flow-row items-center"
                 v-if="paintings"
             >
-                <div v-for="painting in paintings" :key="painting.id">
-                    <div
-                        ref="paintingContainer"
-                        :img-alt="`${painting.name}`"
-                        class="mx-10 z-10 bg-primary shadow-lg object-contain justify-between my-10 drop-shadow-2xl rounded-lg"
-                        aria-describedby="picture"
-                    >
-                        <div
-                            class="align-middle col-span-1 justify-items-center object-center"
-                        >
-                            <a :href="`/paintings/${painting.id}`">
-                                <img
-                                    :src="`${painting.filename}`"
-                                    class="h-[65%] py-7 px-10 border-spacing-7 rounded-2xl z- border-white border-t-white"
-                            /></a>
-                        </div>
-                        <div class="ml-5 mb-2">
-                            <span class="card-body text-2xl">{{
-                                painting.description
-                            }}</span>
-                        </div>
-                        <p class="card-body text-xl ml-5 mb-5 pb-3">
-                            Price: ${{ painting.price }}
-                            <Button
-                                :pill="true"
-                                class="bg-secondary float-right border-8"
-                                type="submit"
-                                method="POST"
-                                @click="
-                                    handleCheckoutClick(
-                                        painting.price,
-                                        painting.id
-                                    )
-                                "
-                                >Buy Now!</Button
-                            >
-                        </p>
-
-                    </div>
-                </div>
-                <PaintingSkeleton v-show="!paintings"> </PaintingSkeleton>
+                <template v-for="painting in paintings" :key="painting.id">
+                    <PaintingCard :painting="painting" @click="handleCheckoutClick" />
+                    <PaintingSkeleton v-show="!paintings"> </PaintingSkeleton>
+                </template>
             </div>
         </template>
     </Layout>
@@ -55,70 +17,53 @@
 
 <script setup>
 import Layout from "@/Layouts/Layout.vue";
+import PaintingCard from "@/Components/PaintingCard.vue";
 import { usePage, Head } from "@inertiajs/vue3";
-import { defineComponent, computed, onMounted } from "vue";
-import { ref } from "vue";
+import { defineComponent, onMounted, reactive } from "vue";
+import { ref, provide, computed } from "vue";
 import PaintingSkeleton from "@/Components/Paintings/PaintingSkeleton.vue";
 import { Button } from "flowbite-vue";
-const page = computed(()=> usePage());
-const user = usePage().props.auth.user;
-const {
-    props: { paintings },
-} = usePage();
-const paintingContainer = ref({});
-const paymentLinkContainer = ref({});
-const renderPaintings = () => {
-    if (props.paintings) {
-        paintingContainer.value = props.paintings;
-    }
-    if (props.paymentLinks) {
-        paymentLinkContainer.value = props.paymentLinks;
-    }
-    console.log(paintingContainer, paymentLinkContainer);
-};
-
-
-
-
-
+import { loadStripe } from '@stripe/stripe-js';
 
 defineComponent({
     layout: Layout,
-    props: {
-        paintings: Array,
-        publishableKey: String,
-        sessionId: String,
-        Button,
-        products:Array
-    },
+    Button,
+    props,
+    emits,
+    inheritAttrs:true
 });
 
+const props = defineProps({
+    paintings: null || Array,
+    stripeKey: String,
+    user: Object,
+    products: null || Array,
+    donationLink: null|| Object,
+    painting:null || Object,
 
-const handleCheckoutClick = async (price, id) => {
-    const {
-        props: { sessionId },
-    } = await fetch("/create-checkout-session", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            items: [
-                {
-                    price: painting.price,
-                    quantity: 1,
-                },
-            ],
-        }),
-    }).then((res) => res.json());
+});
 
-    const { error } = await stripe.redirectToCheckout({ sessionId });
+const {
+    props: { donationLink, highEndPainting, lowEndPainting, sessionId,paintings },
+} = usePage();
 
-    if (error) {
-        console.error(error);
-    }
-};
+const painting = computed((id)=>props.paintings.findIndex(id))
+
+
+provide("paintings", paintings);
+provide(donationLink);
+const emits = defineEmits(["submit"]);
+
 const title = ref("Radical Flexibility");
+</script>
+<script>
+export default{
+    components:{
+        PaintingCard,
+        Button,
+        PaintingSkeleton
+    }
+}
 </script>
 <style scoped>
 .card-body {

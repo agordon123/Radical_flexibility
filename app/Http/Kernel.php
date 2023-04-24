@@ -71,7 +71,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
     protected $routeMiddleware = [
-        'stripe' => \App\Http\Middleware\StripeMiddleware::class,
         'stripe.webhook' => \App\Http\Middleware\StripeWebhookMiddleware::class,
     ];
 }

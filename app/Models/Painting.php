@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class Painting extends Model
@@ -12,15 +14,24 @@ class Painting extends Model
         'name',
         'title',
         'description',
-        'price',
-        'currency',
         'available',
         'filename',
+        'highend',
+        'product_id'
+
     ];
-    protected $casts = ['title' => 'string', 'available' => 'boolean'];
+    protected $with = ['product'];
+    protected $casts = ['title' => 'string', 'available' => 'boolean','highend'=>'boolean','product_id'=>'integer'];
 
     public function orders()
     {
-        return $this->belongsToOne(Order::class);
+        return $this->belongsTo(Order::class);
+    }
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
+    public function scopeProductId()
+    {
+
     }
 }

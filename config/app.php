@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Facade;
 use Stripe\Service;
+use Stripe\Stripe;
+
 return [
 
     /*

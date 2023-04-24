@@ -12,6 +12,18 @@ module.exports = {
     ],
 
     theme: {
+        screens:{
+            'tablet': '640px',
+      // => @media (min-width: 640px) { ... }
+
+      'laptop': '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      'desktop': '1280px',
+      // => @media (min-width: 1280px) { ... }
+    },
+
+
         extend: {
             fontFamily: {
                 sansSerif:['Verlag','sans-serif'],
@@ -27,17 +39,14 @@ module.exports = {
                 'secondary': '#70442c', // your secondary text color
                 'accent': '#d0c4a4',
             },
-            colors: {
-                gray: colors.gray,
-                blue: colors.sky,
-                red: colors.rose,
-                pink: colors.fuchsia,
-                yellow:colors.yellow
-              },
+            colors:{
+                'brown':"#70442c",
+                'beige':"#d0c4a4",
+            },
             borderColor:'brown',
 
             plugins: [require('@tailwindcss/forms'), require('flowbite/plugin')],
         }
     }
-
 }
+

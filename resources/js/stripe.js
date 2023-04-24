@@ -1,10 +1,10 @@
 // See your keys here: https://dashboard.stripe.com/apikeys
-import Stripe from 'stripe';
-import {StripeCheckout, StripeElementsPlugin,StripePlugin  } from '@vue-stripe/vue-stripe'
-const options = {
-    pk:process.env.VITE_STRIPE_KEY
-}
-const plugin = StripePlugin({PublicKeyCredential:process.env.STRIPE_KEY})
-const elements = StripeElementsPlugin({PublicKeyCredential})
+import { loadStripe } from '@stripe/stripe-js';
 
-export default {stripe}
+
+const initStripe =async()=>await loadStripe('pk_test_51Mmj2MDxs152QbBr97fqNjqKtSUEyafFaoNgfip4Uj2fwepJ5vnxcutN6GEXPGGq2Ydv9D5vuBIbs1fwmncclwSn00BFSCTNFs');
+
+export default stripe;
+
+
+

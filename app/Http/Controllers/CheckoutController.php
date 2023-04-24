@@ -4,52 +4,17 @@ namespace App\Http\Controllers;
 
 use Stripe\Stripe;
 use Inertia\Inertia;
-use App\Models\Customer;
 use Stripe\StripeClient;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
-use App\Models\StripeProduct;
+
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CheckoutRequest;
+use App\Models\Product;
+
 
 class CheckoutController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-        public function createDonationCheckoutSession(CheckoutRequest $request)
-        {
-            Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-            $secretKey = Stripe::getApiKey();
-            $stripe = new StripeClient($secretKey);
-            $header  = header('Content-Type:application/json');
-            $paymentMethods = $stripe->paymentMethods;
-            $YOUR_DOMAIN = 'http://localhost:4242';
 
-            $product = StripeProduct::where('product_id' == $request->product_id);
-            $stripeProductObject =  $stripe->products->retrieve($product->product_id);
-            $crsfToken = csrf_token();
-            //$product = StripeProduct::where('product_id' == $product_id);
-          //  $line_items = $stripe->paymentLinks->allLineItems('plink_1MxencDxs152QbBrXpq2q9iT', ['limit' => 3]);
-            $session = Session::create([
-                'payment_method_types' => $paymentMethods,
-                'line_items' => [
-                    [
-                            'price'=>$product->price_id,
-                            'currency' => 'usd',
-                            'tax_behavior'=> $stripeProductObject->tax_code,
-                        'quantity' => 1,
-                    ],
-                ],
-                'success_url' => route('checkout.success'),
-                'cancel_url' => route('checkout.cancel'),
-                'automatic_tax'=>[
-                    'enabled'=>false
-                ]
-            ]);
-
-            return Inertia::render('Header',[$session,303,$header]);;
-        }
     public function process(Request $request)
     {
         Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
@@ -87,35 +52,39 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function createSession(Request $request)
+    public function createCheckoutSession(Request $request)
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        $secretKey = config('services.stripe.key.secret');
+        Stripe::setApiKey($secretKey);
+        $painting = $request->input('painting');
+        $orderedPainting = $painting;
+        $stripe = new StripeClient($secretKey);
+        $product = Product::where($request->input('product_id'));
         $stripeProductObject =  $stripe->products->retrieve($product->product_id);
-        $product =StripeProduct::find($request->input('product_id'));
-        $price = $product->price_id;
+
+        $price = $stripeProductObject->price_id;
+        $paymentMethod = $stripe->paymentMethods;
 
 
-        $currency = $product->currency;
-        $name = $product->name;
-        $product_id = $product->product_id;
-        $price_id = $product->price_id;
         $myDomain = 'http://localhost:8000';
         $session = Session::create([
-            'payment_method_types' => $paymentMethods,
+            'payment_method_types' =>[$paymentMethod],
             'line_items' => [
                 [
-                        'price_id'=>$price,
+                        'price'=>$price,
                         'currency' => 'usd',
-                        'tax_behavior'=> $stripeProductObject->tax_code,
+
                     'quantity' => 1,
                 ],
             ],
+            'mode'=>'payment',
             'success_url' => route('checkout.success'),
             'cancel_url' => route('checkout.cancel'),
             'automatic_tax'=>[
                 'enabled'=>false
             ]
         ]);
+        return Inertia::render('',['session'=>$session]);
 /*
         $session = Session::create([
             'payment_method_types' => ['card'],

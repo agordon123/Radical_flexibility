@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Painting;
+use App\Models\StripeProduct;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -37,7 +38,7 @@ class SaveImagesToDatabase extends Command
 
 // Get all image files in the directory
         $files = Storage::files($directory);
-
+        $products = StripeProduct::all();
 // Iterate through the image files
         foreach ($files as $file) {
             // Get the public URL for the stored image
