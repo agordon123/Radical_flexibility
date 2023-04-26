@@ -18,18 +18,20 @@ use Laravel\Cashier\Http\Controllers\WebhookController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profile.edit');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
-Route::get('/checkout', [CheckoutController::class, 'index']);
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
-Route::get('/painting/{painting}', [PaintingController::class, 'show'])->name('painting.show');
-
-Route::post('/donate/checkout',DonationController::class)->name('donate.checkout');
+Route::get('/painting/{id?}', [PaintingController::class, 'show'])->name('painting.show');
 Route::get('/create-webhook', [StripeWebhookController::class, 'createWebhook']);
 
+Route::get('/donate/checkout/success', function (Request $request) {
+    $checkoutSession = $request->user()->stripe()->checkout->sessions->retrieve($request->get('session_id'));
 
-Route::post('/painting/checkout', [CheckoutController::class, 'createSession'])->name('painting.checkout');
+    return inertia('checkout.success', ['checkoutSession' => $checkoutSession]);
+})->name('donate.checkout.success');
+
+Route::post('/painting/checkout', [CheckoutController::class, 'createCheckoutSession'])->name('painting.checkout');
 Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
-
+Route::post('/donate/checkout', DonationController::class)->name('donate.checkout');
 /*Route::post('/create-checkout-session', function (Request $request) {
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 

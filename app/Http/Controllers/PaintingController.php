@@ -37,12 +37,12 @@ class PaintingController extends Controller
 
         return redirect()->back()->with('success', 'Image saved successfully.');
     }
-    public function show(PaintingRepository $id){
+    public function show($id){
 
         $painting = Painting::find($id);
-        $product =Product::find($painting->product_id);
 
-        return Inertia::render('Paintings/{id}',['painting'=>$painting]);
+
+        return Inertia::render(`Paintings/{id?}`,['painting'=>$painting]);
     }
     public function create(Request $request){
         $request->validate([

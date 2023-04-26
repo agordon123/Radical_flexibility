@@ -43,16 +43,13 @@ class StripeWebhookController extends CashierController
      */
     public function handleWebhook(Request $request)
     {
-        $stripe = new StripeClient(config('stripe.secret'));
-        $payload = $request->getContent();
-        $sigHeader = $request->server('STRIPE_SIGNATURE');
+        $payload = $request->all();
 
-        try {
-            $event = Webhook::constructEvent($payload, $sigHeader, env('STRIPE_WEBHOOK_SECRET'));
-        } catch (SignatureVerificationException $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-        }
-
+        // Use the WebhookSignature class to verify the request.
+        $signature = $request->header('Stripe-Signature');
+        $event = \Stripe\Webhook::constructEvent(
+            $payload, $signature, config('cashier.webhook.secret')
+        );
         // Record the webhook event in your database or log file
         // For example:
         Log::info('Webhook received: ' . $event->type);
@@ -101,6 +98,6 @@ class StripeWebhookController extends CashierController
         return response('Webhook endpoint created successfully');
     }
     protected function sessionCompleted(){
-
+        return $this->successMethod();
     }
 }

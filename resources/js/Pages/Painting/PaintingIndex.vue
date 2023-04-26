@@ -17,14 +17,16 @@
 
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-import route from "vendor/tightenco/ziggy/src/js";
-import { computed, defineComponent, ref,unref } from "vue";
-app.config.globalProperties.route = route
+
+import { computed, defineComponent, onMounted, ref } from "vue";
 const {props:{painting} } = computed(()=> usePage())
-console.log(paintings.value)
+
 defineComponent({
     painting:Object,
     required:true,
 })
 const paintingContainer = ref({});
+onMounted(()=>{
+
+})
 </script>

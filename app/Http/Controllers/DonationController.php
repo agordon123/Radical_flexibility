@@ -22,7 +22,7 @@ class DonationController extends Controller
         $input = $request->input();
         $validated = Validator::make([$request->all(),
         'product_id' => 'required|string',
-        'price_id'=>'required|numeric'
+        'price_id'=>'required|string'
     ]);
 
         if($input->product_id == 5 && $validated)
@@ -44,14 +44,14 @@ class DonationController extends Controller
 
             ]],
             'mode' => 'payment',
-            'success_url' => $domain . '/success.html',
-            'cancel_url' => $domain . '/cancel.html',
+            'success_url' => $domain . route('donate.checkout.success'),
+            'cancel_url' => $domain . route('donate.checkout.cancel'),
             'automatic_tax'=>[
                 'enabled'=>false
             ]
           ]);
           event($checkout_session);
-          return Inertia::render($checkout_session->url,[$crsfToken]);
+          return Inertia::location($checkout_session->url,[$crsfToken]);
     }
 
 }

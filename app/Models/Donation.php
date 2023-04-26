@@ -3,12 +3,13 @@
 use App\Models\Donor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Cashier\Billable;
 
 class Donation extends Model
 {
-    use HasFactory;
-    
-    protected $connection = 'mysqli';
+    use HasFactory; use Billable;
+
+
     protected $fillable = [
         'user_id',
         'amount',

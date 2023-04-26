@@ -14,10 +14,9 @@
                         Radical Flexibility Fund
                     </h1>
                     <div
-                        class="ml-[100px] mr-[100px]  p-4 text-xl font-bold bg-primary align-baseline"
-
+                        class="ml-[100px] mr-[100px] p-4 text-xl font-bold bg-primary align-baseline"
                     >
-<DonationForm  />
+                    <slot name="donation" />
                     </div>
                     <div>
                         <a href="https://instagram.com/radicalflexibility"
@@ -49,7 +48,7 @@
                         </li>
                         <li>
                             <NavLink
-                                href="/checkout"
+                                href="/About"
                                 class="text-gold-accent font-semibold hover:underline"
                                 >About the Organization</NavLink
                             >
@@ -86,57 +85,39 @@
 </template>
 
 <script setup>
-import {  defineComponent, ref,computed,inject, watchEffect } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { Button } from "flowbite-vue";
 import NavLink from "@/Components/UI/NavLink.vue";
 import ApplicationLogo from "@/Components/UI/ApplicationLogo.vue";
 import DonationForm from "@/Forms/DonationForm.vue";
-defineComponent({components:{
-    ApplicationLogo,
-    NavLink,
-    Link,
-    Button,
-    DonationForm
+defineComponent({
+    components: {
+        ApplicationLogo,
+        NavLink,
+        Link,
+        Button,
+        DonationForm,
     },
     inheritAttrs:true,
     props,
-    emits
+    emits,
+});
 
-
-
-
-
-})
-const paintings = inject('paintings')
 const props = defineProps({
-    donationLink:{type:Object,
-    required:true,}
-})
-const {donationLink} = computed(()=>usePage().props);
-watchEffect()
-const emits = defineEmits(['donate'])
+    donationLink: {
+        type: Object,
+    },
+});
+const { donationLink } = computed(() => usePage().props);
+const product = ref({});
+
+const emits = defineEmits(["submit"]);
 
 const form = useForm({
-   ...donationLink
+    ...donationLink,
+});
 
-})
-const donate = async () => {
-    console.log(form);
-    console.log({donationLink})
-  //  const url =props.donationLink ? `/donate/checkout` : null;
-    //try {
-     //   const response = await form.post("/donate/checkout", {
-     //       product_id: form.product.product_id
-     //   });
-
-    //    const sessionId = response.data.sessionId;
-
-   //     window.location.href = `/checkout/${sessionId}`;
-  //  } catch (error) {
-  //      console.error(error);
-  //  }
-};
 </script>
 <style>
 .text-gold-accent {

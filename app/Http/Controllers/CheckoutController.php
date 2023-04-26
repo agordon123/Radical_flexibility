@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 
 use App\Http\Controllers\Controller;
+use App\Models\Painting;
 use App\Models\Product;
 
 
@@ -56,17 +57,17 @@ class CheckoutController extends Controller
     {
         $secretKey = config('services.stripe.key.secret');
         Stripe::setApiKey($secretKey);
-        $painting = $request->input('painting');
-        $orderedPainting = $painting;
-        $stripe = new StripeClient($secretKey);
+        $painting = Painting::findOrFail($request->input('painting_id'));
         $product = Product::where($request->input('product_id'));
+        $stripe = new StripeClient($secretKey);
+        $crsfToken = csrf_token();
         $stripeProductObject =  $stripe->products->retrieve($product->product_id);
 
         $price = $stripeProductObject->price_id;
         $paymentMethod = $stripe->paymentMethods;
 
 
-        $myDomain = 'http://localhost:8000';
+        $myDomain = env('NGROK_URL');
         $session = Session::create([
             'payment_method_types' =>[$paymentMethod],
             'line_items' => [
@@ -78,13 +79,13 @@ class CheckoutController extends Controller
                 ],
             ],
             'mode'=>'payment',
-            'success_url' => route('checkout.success'),
-            'cancel_url' => route('checkout.cancel'),
+            'success_url' => 'https://localhost:4242/' . 'checkout/success',
+            'cancel_url' => 'https://localhost:4242/' . 'checkout/cancel',
             'automatic_tax'=>[
                 'enabled'=>false
             ]
         ]);
-        return Inertia::render('',['session'=>$session]);
+        return response()->json(['session'=>$session,'crsf_token'=>$crsfToken]);
 /*
         $session = Session::create([
             'payment_method_types' => ['card'],

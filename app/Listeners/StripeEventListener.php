@@ -49,7 +49,7 @@ class StripeEventListener implements ShouldQueue
 
             case 'customer.created':
                 $customer = StripeCustomer::retrieve($data['id']);
-                $newCustomer = new Customer();
+                $newCustomer = new Customer([]);
                 $email = $customer->email;
                 // Do something with the new customer, like send a welcome email
                 break;

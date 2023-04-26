@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
 class OrderReceived
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    public $order;
     /**
      * Create a new event instance.
      */
@@ -30,7 +30,7 @@ class OrderReceived
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('orders'),
         ];
     }
 }

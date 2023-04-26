@@ -7,7 +7,7 @@
                 v-if="paintings"
             >
                 <template v-for="painting in paintings" :key="painting.id">
-                    <PaintingCard :painting="painting" @click="handleCheckoutClick" />
+                    <PaintingCard :painting="painting" />
                     <PaintingSkeleton v-show="!paintings"> </PaintingSkeleton>
                 </template>
             </div>
@@ -29,15 +29,15 @@ defineComponent({
     layout: Layout,
     Button,
     props,
-    emits,
     inheritAttrs:true
 });
 
 const props = defineProps({
     paintings: null || Array,
-    stripeKey: String,
-    user: Object,
-    products: null || Array,
+    stripeKey: null | String,
+    user: null || Object,
+    highEndPainting: null || Object,
+    lowEndPainting:null || Object,
     donationLink: null|| Object,
     painting:null || Object,
 
@@ -47,12 +47,15 @@ const {
     props: { donationLink, highEndPainting, lowEndPainting, sessionId,paintings },
 } = usePage();
 
-const painting = computed((id)=>props.paintings.findIndex(id))
 
 
 provide("paintings", paintings);
-provide(donationLink);
-const emits = defineEmits(["submit"]);
+provide('donationLink',donationLink);
+const handleCheckoutClick = async(painting) =>{
+
+
+}
+
 
 const title = ref("Radical Flexibility");
 </script>

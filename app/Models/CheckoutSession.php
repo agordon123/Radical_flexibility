@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Painting;
+use Stripe\Checkout\Session;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CheckoutSession extends Model
 {
@@ -16,10 +21,18 @@ class CheckoutSession extends Model
     }
     public function customer()
     {
-        return $this->hasOne(Customer::class);
+        return $this->hasOne(User::class);
     }
-    public function product()
+    public function painting()
     {
         return $this->hasOne(Painting::class);
+    }
+    public function stripeProduct()
+    {
+        return $this->hasOne(Product::class);
+    }
+    public function checkoutSessions()
+    {
+        return $this->hasOne(Session::class);
     }
 }
