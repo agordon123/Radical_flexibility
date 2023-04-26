@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Product;
 use App\Models\Painting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Repositories\PaintingRepository;
+
 
 class PaintingController extends Controller
 {

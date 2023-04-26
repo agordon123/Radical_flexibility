@@ -24,7 +24,7 @@
 
                     <input hidden :value="painting.product" />
                 <Button :pill="true" class="bg-secondary float-right border-8" type="submit" method="POST"
-                :disabled="form.processing">Buy Now!</Button>
+                :disabled="flag">Buy Now!</Button>
 
             </p>
         </form>
@@ -58,10 +58,10 @@ const props = defineProps({
 })
 const {stripeKey,donationLink} = computed(()=>usePage().props)
 
-
+const flag = false;
 
 const handleCheckoutClick = async (painting) => {
-
+     flag = true;
     let stripe = loadStripe(stripeKey)
     let productId = painting.product.id;
     let paintingId = painting.id;
