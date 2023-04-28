@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Models\CheckoutSession;
 use App\Models\Customer;
 use Stripe\Event;
 
@@ -11,6 +12,7 @@ use Stripe\Customer as StripeCustomer;
 use Stripe\Checkout\Session;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Laravel\Cashier\Events\WebhookReceived;
 
 class StripeEventListener implements ShouldQueue
 {
@@ -57,6 +59,11 @@ class StripeEventListener implements ShouldQueue
                 // Add more cases here for other events that you want to handle
             case 'checkout.session.completed':
                 $session = Session::retrieve($data['id']);
+                $checkoutSession = CheckoutSession::find($session->id);
+                $details = $session->total_details;
+                foreach($session as $key){
+
+                }
             default:
                 // Handle any other events that don't match the cases above
                 break;

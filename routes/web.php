@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CheckoutController;
+
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\StripeWebhookController;
@@ -20,16 +20,17 @@ Route::get('/profile/{id}/edit', [UserController::class, 'update'])->name('profi
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
+Route::get('/paintings',[PaintingController::class, 'index'])->name('paintings.index');
 Route::get('/painting/{id?}', [PaintingController::class, 'show'])->name('painting.show');
 Route::get('/create-webhook', [StripeWebhookController::class, 'createWebhook']);
-
 Route::get('/donate/checkout/success', function (Request $request) {
     $checkoutSession = $request->user()->stripe()->checkout->sessions->retrieve($request->get('session_id'));
 
     return inertia('checkout.success', ['checkoutSession' => $checkoutSession]);
 })->name('donate.checkout.success');
 
-Route::post('/painting/checkout', [CheckoutController::class, 'createCheckoutSession'])->name('painting.checkout');
+Route::post('/painting/checkout', [PaintingController::class, 'checkoutPainting'])->name('painting.checkout');
+Route::get('/painting/checkout/success');
 Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
 Route::post('/donate/checkout', DonationController::class)->name('donate.checkout');
 /*Route::post('/create-checkout-session', function (Request $request) {

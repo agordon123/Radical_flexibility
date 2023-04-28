@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use Inertia\Inertia;
 use App\Models\Customer;
-use App\Repositories\PaintingRepository;
-use Illuminate\Support\ServiceProvider;
-use Laravel\Cashier\Cashier;
+use App\Models\User;
 use Stripe\StripeClient;
+use Laravel\Cashier\Cashier;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\ServiceProvider;
+use App\Repositories\PaintingRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Cashier::useCustomerModel(Customer::class);
+        Cashier::useCustomerModel(User::class);
+        Inertia::share([
+            'flash' => function () {
+                return [
+                    'success' => Session::get('success'),
+                    'error' => Session::get('error'),
+                ];
+            },
+        ]);
     }
 }

@@ -16,11 +16,11 @@ const props = defineProps({
 });
 const emits = defineEmits(["submit"]);
 const form = useForm({
-    donationLink:{}
+
 });
-const {product} = computed(()=>usePage().props.donationLink);
-const donate = async () => {
-    const url = props.donationLink ? `/donate/checkout` : null;
+const donationLink = inject('donationLink')
+const donate = async (donationLink) => {
+    url = donationLink.id;
     console.log(url)
     if(url!==null)
     try {
@@ -38,7 +38,7 @@ const donate = async () => {
         console.error(error);
     }
 };
-const donationLink = inject('donationLink');
+
 
 </script>
 <template #donation>

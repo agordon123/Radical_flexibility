@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Stripe\Stripe;
-use Inertia\Inertia;
 use App\Models\Product;
 use Stripe\StripeClient;
 use Illuminate\Http\Request;
@@ -20,6 +19,7 @@ class DonationController extends Controller
     public function __invoke(Request $request)
     {
         $input = $request->input();
+        dd($input);
         $validated = Validator::make([$request->all(),
         'product_id' => 'required|string',
         'price_id'=>'required|string'
@@ -36,7 +36,7 @@ class DonationController extends Controller
         $crsfToken = csrf_token();
         $stripe = new StripeClient(config('services.stripe.secret'));
         $paymentMethods = $stripe->paymentMethods;
-        $checkout_session = \Stripe\Checkout\Session::create([
+        $checkoutSession = \Stripe\Checkout\Session::create([
             'payment_method_type'=>[$paymentMethods],
             'line_items' => [[
               # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
@@ -50,8 +50,8 @@ class DonationController extends Controller
                 'enabled'=>false
             ]
           ]);
-          event($checkout_session);
-          return Inertia::location($checkout_session->url,[$crsfToken]);
+          event($checkoutSession);
+          return response()->json(['checkout_session' => $checkoutSession,'csrf_token'=>$crsfToken],);
     }
 
 }

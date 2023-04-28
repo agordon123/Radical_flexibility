@@ -26,10 +26,10 @@ class HomeController extends Controller
 
         Stripe::setApiKey(config('services.stripe.secret'));
         $stripe_key = config('services.stripe.key');
-
+        $xrsf = csrf_token();
 
         return Inertia::render('Home', ['paintings' => $paints,
-        'stripeKey'=>$stripe_key,'highEndPainting' => $highEndPainting,'lowEndPainting'=>$lowEndPainting,'donationLink'=>$donationProduct]);
+        'stripeKey'=>$stripe_key,'highEndPainting' => $highEndPainting,'lowEndPainting'=>$lowEndPainting,'donationLink'=>$donationProduct,'crsf_token'=>$xrsf]);
     }
 
 }

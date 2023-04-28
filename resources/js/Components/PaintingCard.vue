@@ -18,7 +18,7 @@
                 ? (painting.price = '200.00')
                 : (painting.price = '15.00')
         ">
-        <form method="POST" @submit.prevent="$emit('submit',handleCheckoutClick(painting.id))">
+        <form method="POST" @submit.prevent="$emit('submit',redirectToCheckout(painting))">
             <p class="card-body text-xl ml-5 mb-5 pb-3">
                 Price: ${{ painting.price }}
 
@@ -34,78 +34,54 @@
 
 
 <script setup>
-import { defineComponent, inject,computed,onBeforeMount} from "vue";
+import { defineAsyncComponent, reactive,ref,inject, unref} from "vue";
 import { Button } from "flowbite-vue";
 import { useForm,usePage } from "@inertiajs/vue3";
 import { loadStripe } from "@stripe/stripe-js";
 import { Ziggy } from "@/ziggy";
-defineComponent({
+import axios from "axios";
+import Stripe from "stripe";
+defineAsyncComponent({
     components:{
         Button,
     },
     props: props,
     emits,
 
+
 });
+Ziggy.routes["donate.checkout"];
 
-
+Ziggy.routes["donate.checkout"].methods.entries
 const emits = defineEmits(['submit'])
 const props = defineProps({
     painting:Object,
     stripeKey:String,
-    handleCheckoutClick:Function
+    redirectToCheckout:Function,
+    checkoutSession:Object
 
 })
-const {stripeKey,donationLink} = computed(()=>usePage().props)
 
-const flag = false;
 
-const handleCheckoutClick = async (painting) => {
-     flag = true;
-    let stripe = loadStripe(stripeKey)
-    let productId = painting.product.id;
-    let paintingId = painting.id;
-    form.painting_id = paintingId;
-    form.product_id= productId;
+const flag = ref(false);
+const stripeKey = inject('stripeKey')
 
-    const {
-        props: { sessionId },
-    } = await form.post("/painting/checkout",{preserveScroll:true,})
-    .then((res) => res.json());
+async function redirectToCheckout(painting) {
+    let product = painting.product.product_id;
+    let painting_id = painting.id;
+    console.log(product);
+  try {
+    const response = await axios.post('/painting/checkout', { product,painting_id });
+    const sessionId = response.data.sessionId;
 
-    const { error } = await stripe.redirectToCheckout({ sessionId });
-
-    if (error) {
-        console.error(error);
-    }
-};
-async function createCheckoutSession(painting) {
-    const product_id  = painting.product.product_id;
-    const price_id = painting.product.price_id;
-    const product = Object.assign({},product_id,price_id);
-    try {
-
-    } catch (error) {
-
-    }
-  fetch('/create-checkout-session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-     product
-    })
-  })
-  .then(response => response.json())
-  .then(session => {
-    // Redirect the user to the checkout page
-    window.location.href = session.url;
-  })
-  .catch(error => {
-    console.error(error);
-  });
+    const stripe = Stripe(props.stripeKey);
+    await stripe.redirectToCheckout({ sessionId });
+  } catch (error) {
+    console.error('Error redirecting to Stripe Checkout:', error);
+  }
 }
+
+// Call redirectToCheckout with the painting object when needed
 
 
 </script>

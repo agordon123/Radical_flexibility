@@ -15,7 +15,7 @@ const donationLink = inject('donationLink');
     <div v-if="key==id">
         <form method="POST" :v-bind="donationLink.id">
 
-            <Button :pill="true" />
+            <Button :pill="true" >DONATE NOW</Button>
         </form>
     </div>
 </template>

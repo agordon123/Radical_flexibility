@@ -7,7 +7,7 @@
                 v-if="paintings"
             >
                 <template v-for="painting in paintings" :key="painting.id">
-                    <PaintingCard :painting="painting" />
+                    <PaintingCard :painting="painting" :stripe-key="stripeKey" />
                     <PaintingSkeleton v-show="!paintings"> </PaintingSkeleton>
                 </template>
             </div>
@@ -27,7 +27,10 @@ import { loadStripe } from '@stripe/stripe-js';
 
 defineComponent({
     layout: Layout,
-    Button,
+    components:{
+        PaintingCard,PaintingSkeleton,Button
+    },
+
     props,
     inheritAttrs:true
 });
@@ -39,34 +42,22 @@ const props = defineProps({
     highEndPainting: null || Object,
     lowEndPainting:null || Object,
     donationLink: null|| Object,
-    painting:null || Object,
+    sessionId:null || Object,
 
 });
 
 const {
-    props: { donationLink, highEndPainting, lowEndPainting, sessionId,paintings },
+    props: { donationLink,sessionId,paintings,stripeKey,user },
 } = usePage();
 
 
 
 provide("paintings", paintings);
 provide('donationLink',donationLink);
-const handleCheckoutClick = async(painting) =>{
-
-
-}
+provide('stripeKey',stripeKey);
 
 
 const title = ref("Radical Flexibility");
-</script>
-<script>
-export default{
-    components:{
-        PaintingCard,
-        Button,
-        PaintingSkeleton
-    }
-}
 </script>
 <style scoped>
 .card-body {

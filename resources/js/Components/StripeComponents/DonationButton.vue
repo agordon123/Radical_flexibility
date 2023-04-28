@@ -1,29 +1,17 @@
-<template #donation>
-    <div class="bg-primary">
-<slot name="donationProduct" />
-
-    </div>
-</template>
 <script setup>
-import DonationForm from "@/Forms/DonationForm.vue";
-
-import { defineComponent,computed } from "vue";
-import { Link, useForm, usePage } from "@inertiajs/vue3";
+import { defineComponent } from "vue";
+import { Button } from "flowbite-vue";
 defineComponent({
-    type:"submit",
-    components:PrimaryButton,DonationForm,
-    props:props,
-
-
-
-
+    props: {
+        donationLink: {
+            type: Object,
+            required: true,
+        },
+    },
 });
-const {donationLink} = computed(()=>usePage().props)
-const emits = defineEmits(['submit']);
-const props =defineProps({
-donationLink:Object
-});
+const donationLink = inject('donationLink');
 </script>
+
 
 
 

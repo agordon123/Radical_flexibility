@@ -14,9 +14,16 @@
                         Radical Flexibility Fund
                     </h1>
                     <div
-                        class="ml-[100px] mr-[100px] p-4 text-xl font-bold bg-primary align-baseline"
+                        class="ml-[100px] mr-[100px] p-4 text-xl font-bold align-baseline"
                     >
-                    <slot name="donation" />
+
+                        <div>
+                            <form method="POST" action="/donate/checkout">
+                                <input hidden v-bind="donationLink" />
+
+                                <Button :pill="true" class=" rounded-2xl " @click="$route('donate.checkout')" >DONATE NOW</Button>
+                            </form>
+        </div>
                     </div>
                     <div>
                         <a href="https://instagram.com/radicalflexibility"
@@ -85,12 +92,16 @@
 </template>
 
 <script setup>
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed, ref, inject, reactive } from "vue";
 import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { Button } from "flowbite-vue";
+import { loadStripe } from "@stripe/stripe-js";
 import NavLink from "@/Components/UI/NavLink.vue";
 import ApplicationLogo from "@/Components/UI/ApplicationLogo.vue";
 import DonationForm from "@/Forms/DonationForm.vue";
+import axios from "axios";
+import Stripe from "stripe";
+
 defineComponent({
     components: {
         ApplicationLogo,
@@ -108,16 +119,48 @@ const props = defineProps({
     donationLink: {
         type: Object,
     },
+    stripeKey:{
+        type:String
+    },
+    sessionId:{
+        type:Object
+    },
+    product:{
+        type:Object
+    }
 });
-const { donationLink } = computed(() => usePage().props);
-const product = ref({});
+const donationLink = inject('donationLink');
+
+const product = reactive(donationLink);
 
 const emits = defineEmits(["submit"]);
 
 const form = useForm({
-    ...donationLink,
+   product
 });
+const handleCheckoutClick = async(donationLink) =>{
+    donationLink = donationLink;
+    const url = '/donate/checkout'
+    const checkoutSession = await axios.post('donate/checkout',props.donationLink)
+    .then(response => {
+        console.log(response.data);
 
+        // Set the checkout session object in the component's data.
+
+        // Set the checkout session object in the component's data.
+        checkoutSession = response.data.checkout_session;
+
+        // Redirect to the checkout page using Inertia.
+        this.$inertia.visit('/checkout', { props: { checkoutSession: checkoutSession } });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+
+
+
+}
 </script>
 <style>
 .text-gold-accent {

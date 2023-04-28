@@ -79,8 +79,8 @@ class CheckoutController extends Controller
                 ],
             ],
             'mode'=>'payment',
-            'success_url' => 'https://localhost:4242/' . 'checkout/success',
-            'cancel_url' => 'https://localhost:4242/' . 'checkout/cancel',
+            'success_url' => $myDomain . 'checkout/success',
+            'cancel_url' => $myDomain . 'checkout/cancel',
             'automatic_tax'=>[
                 'enabled'=>false
             ]
