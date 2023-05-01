@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Events;
-use Stripe\Checkout\Session;
+
+use App\Models\CheckoutSession;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,16 +11,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CheckoutSessionCompleted
+class CheckoutSessionInitiated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $checkoutSession;
     /**
      * Create a new event instance.
      */
-    public function __construct(Session $checkoutSession)
+    public function __construct(CheckoutSession $checkoutSession)
     {
-        $this->checkoutSession = $checkoutSession;
+        return $this->$checkoutSession;
     }
 
     /**

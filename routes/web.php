@@ -34,7 +34,7 @@ Route::post('/painting/checkout', [PaintingController::class, 'checkoutPainting'
 Route::get('/painting/checkout/success',[PaintingController::class,'checkoutSuccess']);
 Route::get('/painting/checkout/cancel',[PaintingController::class, 'checkoutCancel'])->name('painting.checkout.cancel');
 Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
-Route::post('/donate/checkout', DonationController::class)->name('donate.checkout');
+Route::post('/donate/checkout', [DonationController::class,'checkoutDonation'])->name('donate.checkout');
 /*Route::post('/create-checkout-session', function (Request $request) {
     \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 

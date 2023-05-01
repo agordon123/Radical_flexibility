@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Painting;
 use Donation;
-use Stripe\Checkout\Session;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

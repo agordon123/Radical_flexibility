@@ -19,11 +19,10 @@
 import Layout from "@/Layouts/Layout.vue";
 import PaintingCard from "@/Components/PaintingCard.vue";
 import { usePage, Head } from "@inertiajs/vue3";
-import { defineComponent, onMounted, reactive } from "vue";
-import { ref, provide, computed } from "vue";
+import { defineComponent } from "vue";
+import { ref, provide } from "vue";
 import PaintingSkeleton from "@/Components/Paintings/PaintingSkeleton.vue";
 import { Button } from "flowbite-vue";
-import { loadStripe } from '@stripe/stripe-js';
 
 defineComponent({
     layout: Layout,
@@ -48,11 +47,10 @@ const props = defineProps({
 });
 
 const {
-    props: { donationLink,sessionId,paintings,stripeKey,user,csrf_token },
+    props: { donationLink,paintings,stripeKey,user,csrf_token },
 } = usePage();
 
 
-console.log(csrf_token)
 provide("paintings", paintings);
 provide('donationLink',donationLink);
 provide('stripeKey',stripeKey);

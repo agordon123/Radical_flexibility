@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
-    curl
+    curl \
+    gnupg
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -22,6 +23,10 @@ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
 
 # Set the working directory
 WORKDIR /var/www

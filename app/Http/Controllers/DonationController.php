@@ -9,23 +9,19 @@ use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
+
 
 class DonationController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function checkoutDonation(Request $request)
     {
-        $input = $request->input();
-        dd($input);
-        $validated = Validator::make([$request->all(),
-        'product_id' => 'required|string',
-        'price_id'=>'required|string'
-    ]);
-
-        if($input->product_id == 5 && $validated)
+        $input = $request->input('price_id');
+        $donationproduct = Product::where('price_id','==',$input);
+        if(
+            $input == 5 && $donationproduct->price_id)
         {
             $product = Product::where('product_id' == $input->product_id);
         }
@@ -35,9 +31,13 @@ class DonationController extends Controller
         $domain = env('NGROK_URL');
         $crsfToken = csrf_token();
         $stripe = new StripeClient(config('services.stripe.secret'));
-        $paymentMethods = $stripe->paymentMethods;
+        $paymentTypes = [];
+        foreach($stripe->paymentMethods->all() as $key){
+
+
+        }
         $checkoutSession = \Stripe\Checkout\Session::create([
-            'payment_method_type'=>[$paymentMethods],
+            'payment_method_type'=>['card'],
             'line_items' => [[
               # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
               'price_id' => $product->price_id,
@@ -50,8 +50,8 @@ class DonationController extends Controller
                 'enabled'=>false
             ]
           ]);
-          event($checkoutSession);
-          return response()->json(['checkout_session' => $checkoutSession,'csrf_token'=>$crsfToken],);
+
+          return response()->json(['sessionId' => $checkoutSession->id]);
     }
 
 }

@@ -78,7 +78,7 @@ const props = defineProps({
 
 const flag = ref(false);
 const stripeKey = inject('stripeKey')
-const stripe = window.Stripe(stripeKey);
+const stripe = window.Stripe(props.stripeKey);
 async function redirectToCheckout(painting) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
     let product = painting.product.price_id;
