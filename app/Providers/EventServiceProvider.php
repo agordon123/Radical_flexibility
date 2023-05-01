@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-
+use App\Http\Controllers\StripeWebhookController;
 use App\Listeners\StripeEventListener;
 use Illuminate\Auth\Events\Registered;
 use Laravel\Cashier\Events\WebhookReceived;

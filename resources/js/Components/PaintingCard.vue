@@ -47,34 +47,48 @@ defineAsyncComponent({
     },
     props: props,
     emits,
+    inheritAttrs:true
 
 
 });
 Ziggy.routes["donate.checkout"];
 
 Ziggy.routes["donate.checkout"].methods.entries
+
+
+// Retrieve the CSRF token
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+// Set the CSRF token in Axios request headers
+
+
+// Now you can make your POST request with the painting data
+// ...
+
 const emits = defineEmits(['submit'])
 const props = defineProps({
     painting:Object,
     stripeKey:String,
     redirectToCheckout:Function,
-    checkoutSession:Object
+    checkoutSession:Object,
+
 
 })
 
 
 const flag = ref(false);
 const stripeKey = inject('stripeKey')
-
+const stripe = window.Stripe(stripeKey);
 async function redirectToCheckout(painting) {
-    let product = painting.product.product_id;
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
+    let product = painting.product.price_id;
     let painting_id = painting.id;
     console.log(product);
   try {
     const response = await axios.post('/painting/checkout', { product,painting_id });
-    const sessionId = response.data.sessionId;
+    const sessionId = response.data.id;
 
-    const stripe = Stripe(props.stripeKey);
+
     await stripe.redirectToCheckout({ sessionId });
   } catch (error) {
     console.error('Error redirecting to Stripe Checkout:', error);
@@ -82,6 +96,7 @@ async function redirectToCheckout(painting) {
 }
 
 // Call redirectToCheckout with the painting object when needed
-
+//{"id":"cs_test_a1tbVN3duynRA9pMRCfSRdJiKzjlKd0xDgw8zr5CmyV5Gqfs9viDZALX0o",
+//"object":"checkout.session","after_expiration":null,"allow_promotion_codes":null,"amount_subtotal":20000,"amount_total":20000,"automatic_tax":{"enabled":false,"status"
 
 </script>

@@ -21,7 +21,7 @@
                             <form method="POST" action="/donate/checkout">
                                 <input hidden v-bind="donationLink" />
 
-                                <Button :pill="true" class=" rounded-2xl " @click="$route('donate.checkout')" >DONATE NOW</Button>
+                                <Button :pill="true" class=" rounded-2xl " @click="$emit('submit','donate.checkout')" >DONATE NOW</Button>
                             </form>
         </div>
                     </div>
@@ -116,9 +116,6 @@ defineComponent({
 });
 
 const props = defineProps({
-    donationLink: {
-        type: Object,
-    },
     stripeKey:{
         type:String
     },

@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Models\CheckoutSession;
 use App\Models\Customer;
-use Stripe\Event;
-
 use Stripe\Charge;
 use Stripe\Stripe;
 use Stripe\Customer as StripeCustomer;
@@ -20,22 +18,22 @@ class StripeEventListener implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct()
+    public $webhookEvent;
+    public function __construct(WebhookReceived $webhookEvent)
     {
-        //
+        $this->webhookEvent = $webhookEvent;
     }
-
+    // Above Code Constructs a new webhook event and passes it to handle method
     /**
      * Handle the event.
      */
-    public function handle(Event $event)
+    public function handle(WebhookReceived $webhookEvent)
     {
             // Set the Stripe API key
         Stripe::setApiKey(config('services.stripe.secret'));
-        $payload = $event->payload;
+        $payload = $webhookEvent->payload;
         // Retrieve the event data
-        $data = $event->data;
-        $object = $data->object;
+
         $type = $payload['type'];
         $data = $payload['data']['object'];
         $events = [
@@ -48,8 +46,12 @@ class StripeEventListener implements ShouldQueue
                 $customer = $charge->customer;
                 // Do something with the successful charge, like update your database or send a confirmation email
                 break;
-
-            case 'customer.created':
+                case 'charge.succeeded':
+                    $charge = Charge::retrieve($data['id']);
+                    $customer = $charge->customer;
+                    // Do something with the successful charge, like update your database or send a confirmation email
+                    break;
+            case 'checkout.session.expired':
                 $customer = StripeCustomer::retrieve($data['id']);
                 $newCustomer = new Customer([]);
                 $email = $customer->email;
@@ -69,6 +71,6 @@ class StripeEventListener implements ShouldQueue
                 break;
         }
 
-        return $event;
+        return $webhookEvent;
     }
 }

@@ -43,18 +43,20 @@ const props = defineProps({
     lowEndPainting:null || Object,
     donationLink: null|| Object,
     sessionId:null || Object,
+    csrf_token:null || String
 
 });
 
 const {
-    props: { donationLink,sessionId,paintings,stripeKey,user },
+    props: { donationLink,sessionId,paintings,stripeKey,user,csrf_token },
 } = usePage();
 
 
-
+console.log(csrf_token)
 provide("paintings", paintings);
 provide('donationLink',donationLink);
 provide('stripeKey',stripeKey);
+provide('xsrf',csrf_token);
 
 
 const title = ref("Radical Flexibility");

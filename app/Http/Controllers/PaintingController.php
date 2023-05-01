@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\OrderInitiated;
 use Stripe\Stripe;
+use Stripe\Product;
 use Inertia\Inertia;
 
+use App\Models\Order;
 use App\Models\Painting;
-use App\Models\Product as ModelsProduct;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Stripe\Product;
 use Stripe\StripeClient;
+use App\Enums\OrderStatus;
+use Illuminate\Http\Request;
+use App\Events\OrderInitiated;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Product as ModelsProduct;
 
 class PaintingController extends Controller
 {
@@ -55,39 +57,55 @@ class PaintingController extends Controller
     }
     public function checkoutPainting(Request $request){
         Stripe::setApiKey(config('services.stripe.secret'));
+        $price_id = $request->input('product');
+        $paintingId= $request->input('painting.id');
 
-        $product_id = $request->input('product');
-        $product = ModelsProduct::where('product_id' == $product_id);
-        $price_id = $product->price_id;
-        $stripeProduct = Product::retrieve($product);
-
-
-
-
-
-        $domain = env('NGROK_URL');
         $localDomain = 'https://localhost:8000';
-        $crsfToken = csrf_token();
+
         $stripe = new StripeClient(config('services.stripe.secret'));
-        $paymentMethods = $stripe->paymentMethods;
+        $url = env('NGROK_URL');
+
         $checkoutSession = \Stripe\Checkout\Session::create([
-            'payment_method_type'=>[$paymentMethods],
+            'payment_method_types'=>['card'],
+
             'line_items' => [[
               # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-              'price_id' => $price_id
-
+              'price' => $price_id,
+              'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => $localDomain . route('painting.checkout.success'),
-            'cancel_url' => $localDomain . route('painting.checkout.cancel'),
+            'success_url' => $localDomain . '/painting/checkout/success',
+            'cancel_url' => $localDomain. '/painting/checkout/cancel',
             'automatic_tax'=>[
                 'enabled'=>false
             ]
           ]);
-          event(OrderInitiated::class);
+       //   $order = new Order([
+     //       'checkout_session_id' => $checkoutSession->id,
+        //    'status' => OrderStatus::Unpaid,
+      //      'painting_id'=>$paintingId
+       // ]);
 
-          return response()->json(['checkoutSession'=>$checkoutSession]);
+    //    $order->save();
+     //   event(new OrderInitiated($order));
 
+        return response()->json($checkoutSession);
+
+    }
+    public function checkoutSuccess(Request $request)
+    {
+        // Retrieve the session ID from the request parameters
+        $sessionId = $request->input('session_id');
+
+        // You can now use the session ID to retrieve payment details or perform other tasks
+
+        // Return a view to display the success message
+        return Inertia::render('painting/checkout/success',['sessionId'=>$sessionId]);
+    }
+    public function checkoutCancel(Request $request){
+        $sessionId = $request->input('session_id');
+
+        return Inertia::render('Checkout/Cancel',['sessionId'=>$sessionId]);
     }
 
 

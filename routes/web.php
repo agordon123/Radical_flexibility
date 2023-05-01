@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\PaintingController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Models\Painting;
 use Laravel\Cashier\Http\Controllers\WebhookController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -30,7 +31,8 @@ Route::get('/donate/checkout/success', function (Request $request) {
 })->name('donate.checkout.success');
 
 Route::post('/painting/checkout', [PaintingController::class, 'checkoutPainting'])->name('painting.checkout');
-Route::get('/painting/checkout/success');
+Route::get('/painting/checkout/success',[PaintingController::class,'checkoutSuccess']);
+Route::get('/painting/checkout/cancel',[PaintingController::class, 'checkoutCancel'])->name('painting.checkout.cancel');
 Route::post('/stripe/webhook', [WebhookController::class, 'handleWebhook'])->name('cashier.webhook');
 Route::post('/donate/checkout', DonationController::class)->name('donate.checkout');
 /*Route::post('/create-checkout-session', function (Request $request) {

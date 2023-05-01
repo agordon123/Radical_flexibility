@@ -19,6 +19,7 @@ class Customer extends StripeCustomer
         'stripe_id',
         'card_brand',
         'card_last_four',
+        'order_id'
     ];
 
     protected $hidden = [
@@ -33,5 +34,6 @@ class Customer extends StripeCustomer
     ];
     public function orders()
     {
+
     }
 }

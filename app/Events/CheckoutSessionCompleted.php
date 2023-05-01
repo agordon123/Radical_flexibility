@@ -1,27 +1,25 @@
 <?php
 
 namespace App\Events;
-
-use App\Models\Order;
-use App\Enums\OrderStatus;
+use Stripe\Checkout\Session;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
-class OrderInitiated
+class CheckoutSessionCompleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $order;
+    public $checkoutSession;
     /**
      * Create a new event instance.
      */
-    public function __construct(Order $order)
+    public function __construct(Session $checkoutSession)
     {
-            return $this->order = $order;
+        $this->checkoutSession = $checkoutSession;
     }
 
     /**
@@ -32,7 +30,7 @@ class OrderInitiated
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('orders'),
+            new PrivateChannel('stripe-events'),
         ];
     }
 }

@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('checkout_sessions', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('stripe_session_id')->unique();
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->json('metadata');
-            $table->string('status');
+            $table->string('type')->comment('billing or shipping');
+            $table->string('line1');
+            $table->string('line2')->nullable();
+            $table->string('city');
+            $table->string('state')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('country');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('checkout_session');
+        Schema::dropIfExists('addresses');
     }
 };

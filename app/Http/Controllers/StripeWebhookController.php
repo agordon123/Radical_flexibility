@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CheckoutSession;
+use App\Models\Payment;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\StripeClient;
@@ -12,6 +14,7 @@ use Stripe\Service\WebhookEndpointService;
 use Stripe\Exception\SignatureVerificationException;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 use Stripe\Checkout\Session;
+use Stripe\Event;
 
 class StripeWebhookController extends CashierController
 {
@@ -21,7 +24,7 @@ class StripeWebhookController extends CashierController
     public function createEndpoint()
     {
 
-        $url = 'http://localhost:8000' . '/stripe/webhook';
+        $url = env('NGROK_URL') . '/stripe/webhook';
         $stripe = new StripeClient(config('services.stripe.key'));
         $webhookEndpointService = new WebhookEndpointService($stripe);
         $webhookEndpoint = $webhookEndpointService->create([
@@ -57,7 +60,8 @@ class StripeWebhookController extends CashierController
         // Handle the Stripe webhook event
         switch ($event->type) {
             case 'payment_intent.succeeded':
-                $this->paymentSucceeded($event->data->object);
+                $session = Session::retrieve($event->data->session_id);
+                $this->paymentSucceeded($event->data->paymentSucceeded);
                 break;
             case 'payment_intent.failed':
                 $this->paymentFailed($event->data->object);
@@ -67,9 +71,9 @@ class StripeWebhookController extends CashierController
                 // Handle other events as needed
                 break;
                 case 'checkout.session.completed':
-                    $session = Session::retrieve($event->data->object);
-                    case 'checkout.session.async_payment_succeeded':
-                    break;
+                $this->checkoutSessionCompleted($event->data->object);
+                case 'checkout.session.async_payment_succeeded':
+                break;
             default:
                 // Ignore unsupported events
                 break;
@@ -87,6 +91,7 @@ class StripeWebhookController extends CashierController
     protected function paymentFailed($paymentIntent)
     {
         $payment = $paymentIntent;
+        $finance = new Payment([]);
         dd($payment);
     }
     protected function createWebhook()
@@ -97,7 +102,11 @@ class StripeWebhookController extends CashierController
         // Return a response to the user
         return response('Webhook endpoint created successfully');
     }
-    protected function sessionCompleted(){
-        return $this->successMethod();
+    protected function sessionCompleted(CheckoutSession $checkoutSession){
+        return $this->checkoutSessionCompleted($checkoutSession);
+    }
+    public function checkoutSessionCompleted(CheckoutSession $event)
+    {
+
     }
 }
