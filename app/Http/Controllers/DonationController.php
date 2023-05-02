@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CheckoutSessionInitiated;
 use Stripe\Stripe;
 use App\Models\Product;
 use Stripe\StripeClient;
 use Illuminate\Http\Request;
 use Stripe\Checkout\Session;
+use App\Events\OrderInitiated;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Event;
 
 
 class DonationController extends Controller
@@ -50,6 +53,7 @@ class DonationController extends Controller
                 'enabled'=>false
             ]
           ]);
+
 
           return response()->json(['sessionId' => $checkoutSession->id]);
     }

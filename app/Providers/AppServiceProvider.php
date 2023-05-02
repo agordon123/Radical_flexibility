@@ -4,8 +4,6 @@ namespace App\Providers;
 
 use Inertia\Inertia;
 use App\Models\Customer;
-use App\Models\User;
-use Stripe\StripeClient;
 use Laravel\Cashier\Cashier;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;

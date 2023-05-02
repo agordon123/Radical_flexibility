@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\CheckoutSession;
-use Stripe\Checkout\Session;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,17 +10,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CheckoutSessionCompleted implements ShouldBroadcast
+class PaymentCompleted
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $checkoutSession;
+
     /**
      * Create a new event instance.
      */
-    public function __construct(CheckoutSession $checkoutSession)
+    public function __construct()
     {
-        $this->checkoutSession = $checkoutSession;
+        //
     }
 
     /**
@@ -33,7 +30,7 @@ class CheckoutSessionCompleted implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('redis'),
+            new PrivateChannel('channel-name'),
         ];
     }
 }

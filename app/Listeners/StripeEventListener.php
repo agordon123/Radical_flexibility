@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Http\Requests\StripeWebhookRequest;
 use App\Models\CheckoutSession;
 use App\Models\Customer;
 use Stripe\Charge;
@@ -19,7 +20,7 @@ class StripeEventListener implements ShouldQueue
      * Create the event listener.
      */
     public $webhookEvent;
-    public function __construct(WebhookReceived $webhookEvent)
+    public function __construct(StripeWebhookRequest $webhookEvent)
     {
         $this->webhookEvent = $webhookEvent;
     }
@@ -27,7 +28,7 @@ class StripeEventListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(WebhookReceived $webhookEvent)
+    public function handle(StripeWebhookRequest $webhookEvent)
     {
             // Set the Stripe API key
         Stripe::setApiKey(config('services.stripe.secret'));

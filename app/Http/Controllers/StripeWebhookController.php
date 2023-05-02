@@ -28,7 +28,7 @@ class StripeWebhookController extends CashierController
         $stripe = new StripeClient(config('services.stripe.key'));
         $webhookEndpointService = new WebhookEndpointService($stripe);
         $webhookEndpoint = $webhookEndpointService->create([
-                    'url' => 'https://example.com/stripe/webhook',
+                    'url' => env('APP_URL') .'stripe/webhook',
                     'enabled_events' => ['*'],
                     // additional configuration options as needed
                                                             ]);

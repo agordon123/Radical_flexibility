@@ -19,7 +19,7 @@ class OrderReceived
      */
     public function __construct(Order $order)
     {
-        ;
+        return $this->order;
     }
 
     /**
@@ -30,7 +30,7 @@ class OrderReceived
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('orders'),
+            new PrivateChannel('redis'),
         ];
     }
 }

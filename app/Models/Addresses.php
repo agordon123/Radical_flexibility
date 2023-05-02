@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Addresses extends Model
 {
     use HasFactory;
+    protected $guarded = ['customer_id',];
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

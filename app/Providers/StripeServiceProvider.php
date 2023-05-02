@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 
+
 use Illuminate\Support\Facades\Event;
 use Stripe\Stripe;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Events\WebhookReceived;
 use App\Http\Controllers\StripeWebhookController;
+
 
 
 class StripeServiceProvider extends ServiceProvider
@@ -17,8 +19,8 @@ class StripeServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
 
+        Event::listen(WebhookReceived::class, [StripeWebhookController::class, 'handleWebhook']);
 
 
     }
@@ -28,6 +30,6 @@ class StripeServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        Stripe::setApiKey(config('services.stripe.secret'));
     }
 }

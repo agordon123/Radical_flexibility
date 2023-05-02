@@ -8,17 +8,10 @@ use Laravel\Cashier\Events\WebhookReceived;
 
 class StripeEventSubscriber
 {
-    /**
-     * Handle user login events.
-     */
-    public function handleUserLogin(string $event): void {}
 
-    /**
-     * Handle user logout events.
-     */
-    public function handleUserLogout(string $event): void {}
+    public function handleEvent(string $event): void {
 
-    public function handleEvent(string $event): void {}
+    }
 
     /**
      * Register the listeners for the subscriber.
@@ -27,14 +20,8 @@ class StripeEventSubscriber
 
     public function subscribe(Dispatcher $events): void
     {
-        $events->listen(
-            WebhookReceived::class,
-            [StripeEventSubscriber::class, 'handleEvent']
-        );
 
-        $events->listen(
-            Logout::class,
-            [UserEventSubscriber::class, 'handleUserLogout']
-        );
+
+
     }
 }

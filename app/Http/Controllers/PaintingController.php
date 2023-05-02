@@ -10,8 +10,10 @@ use App\Models\Order;
 use App\Models\Painting;
 use Stripe\StripeClient;
 use App\Enums\OrderStatus;
+use App\Events\CheckoutSessionInitiated;
 use Illuminate\Http\Request;
 use App\Events\OrderInitiated;
+use App\Models\CheckoutSession;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Product as ModelsProduct;
 
@@ -78,17 +80,20 @@ class PaintingController extends Controller
             'cancel_url' => $localDomain. '/painting/checkout/cancel',
             'automatic_tax'=>[
                 'enabled'=>false
-            ]
+            ],
+
           ]);
-       //   $order = new Order([
-     //       'checkout_session_id' => $checkoutSession->id,
-        //    'status' => OrderStatus::Unpaid,
-      //      'painting_id'=>$paintingId
-       // ]);
+         $order = new Order([
+          'checkout_session_id' => $checkoutSession->id,
+          'checkout_session_object'=>$checkoutSession->object,
+            'status' => OrderStatus::Unpaid,
+           'painting_id'=>$paintingId
+        ]);
 
-    //    $order->save();
-     //   event(new OrderInitiated($order));
-
+        $order->save();
+        event(new OrderInitiated($order));
+        $dbSession = new CheckoutSession(['session_id'=>$checkoutSession->id,'order_id'=>$order->id]);
+        event(new CheckoutSessionInitiated($dbSession));
         return response()->json($checkoutSession);
 
     }

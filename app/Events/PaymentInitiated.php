@@ -2,8 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\CheckoutSession;
-use Stripe\Checkout\Session;
+use App\Models\Payment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,17 +11,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CheckoutSessionCompleted implements ShouldBroadcast
+class PaymentInitiated
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $checkoutSession;
+    public $payment;
     /**
      * Create a new event instance.
      */
-    public function __construct(CheckoutSession $checkoutSession)
+    public function __construct(Payment $payment)
     {
-        $this->checkoutSession = $checkoutSession;
+        return $this->payment;
     }
 
     /**
