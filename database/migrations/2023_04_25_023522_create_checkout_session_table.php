@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\Order;
+use App\Models\Customer;
 use App\Enums\PaymentStatus;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,10 +17,11 @@ return new class extends Migration
         Schema::create('checkout_sessions', function (Blueprint $table) {
             $table->id();
             $table->string('checkout_session_id')->unique();
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->json('metadata');
-            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
-            $table->enum('payment_status',[PaymentStatus::Paid,PaymentStatus::Pending,PaymentStatus::Failed]);
+            $table->foreignIdFor(Customer::class,'customer_id')->nullable();
+            $table->json('metadata')->nullable();
+            $table->foreignIdFor(Order::class,'order_id')->nullable();
+            $table->foreignIdFor(Payment::class,'payment_intent_id')->nullable();
+            $table->enum('payment_status',[PaymentStatus::Pending,PaymentStatus::Paid,PaymentStatus::Failed])->default(PaymentStatus::Pending);
             $table->timestamps();
         });
     }

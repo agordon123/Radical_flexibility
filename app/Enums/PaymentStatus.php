@@ -7,6 +7,7 @@
 
 namespace App\Enums;
 
+use StringBackedEnum;
 
 /**
  * Class PaymentStatus
@@ -14,9 +15,9 @@ namespace App\Enums;
  * @author  Zura Sekhniashvili <zurasekhniashvili@gmail.com>
  * @package App\Enums
  */
-enum PaymentStatus: string
+final class PaymentStatus extends StringBackedEnum
 {
-    case Pending = 'pending';
-    case Paid = 'paid';
-    case Failed = 'failed';
+    const Pending = 'pending';
+    const Paid = 'paid';
+    const Failed = 'failed';
 }

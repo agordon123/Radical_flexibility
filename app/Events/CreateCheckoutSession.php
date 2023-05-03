@@ -3,25 +3,27 @@
 namespace App\Events;
 
 use App\Models\CheckoutSession;
+use App\Models\Painting;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CreateCheckoutSession
+
+class CreateCheckoutSession implements ShouldQueue
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $checkoutSession;
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(CheckoutSession $checkoutSession)
+    use SerializesModels,InteractsWithSockets,Dispatchable;
+    public $session;
+    public $painting;
+    public function __construct(CheckoutSession $session,Painting $painting)
     {
-        return $this->checkoutSession;
+        $this->session = $session;
+        $this->painting= $painting;
     }
-
-    /**
+        /**
      * Get the channels the event should broadcast on.
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
@@ -29,7 +31,7 @@ class CreateCheckoutSession
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('redis'),
         ];
     }
 }

@@ -16,7 +16,7 @@ class ProcessCheckoutSessionCompleted implements ShouldQueue
      */
     public function __construct(CheckoutSessionCompleted $event)
     {
-        //
+        $this->checkoutSession = $event;
     }
 
     /**
@@ -24,6 +24,6 @@ class ProcessCheckoutSessionCompleted implements ShouldQueue
      */
     public function handle(CheckoutSessionCompleted $event): void
     {
-        //
+
     }
 }

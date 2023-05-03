@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Cashier\Billable;
-use \Stripe\Customer as StripeCustomer;
-class Customer extends StripeCustomer
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Customer extends Authenticatable
 {
     use HasFactory; use Billable;
 
@@ -32,8 +33,13 @@ class Customer extends StripeCustomer
         'trial_ends_at' => 'datetime',
         'subscription_ends_at' => 'datetime',
     ];
-    public function orders()
+    public function stripeId()
     {
-
+        return $this->stripeId();
     }
+
+
+
+
+
 }

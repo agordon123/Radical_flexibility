@@ -15,7 +15,7 @@ class CheckoutSession extends Model
     use HasFactory;
     protected $fillable = ['stripe_session_id', 'order_id', 'product_id', 'payment_intent',
                             'payment_method', 'payment_method_details', 'customer_id', 'amount','object' ,'billing_details','metadata'];
-    protected $casts = ['session_id' => 'string', 'product_id' => 'string', 'payment_method_details' => 'json','billing_details'=>'json'];
+    protected $casts = ['stripe_session_id' => 'string', 'product_id' => 'string', 'payment_method_details' => 'json','billing_details'=>'json'];
 
     public function order()
     {
@@ -39,6 +39,6 @@ class CheckoutSession extends Model
     }
     public function billingAddress()
     {
-        return $this->hasOne(BillingAddress::class);
+        return $this->hasOne(Addresses::class);
     }
 }

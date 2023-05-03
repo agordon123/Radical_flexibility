@@ -17,11 +17,16 @@ class CheckoutSessionCompleted implements ShouldBroadcast
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $checkoutSession;
+    public $session;
+    public $order;
+    public $paymentIntent;
+    public $customer;
     /**
      * Create a new event instance.
      */
-    public function __construct(CheckoutSession $checkoutSession)
+    public function __construct(Session $session,CheckoutSession $checkoutSession)
     {
+        $this->session = $session;
         $this->checkoutSession = $checkoutSession;
     }
 
