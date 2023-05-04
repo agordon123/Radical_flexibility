@@ -1,23 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
 
+namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Customer;
 use App\Models\Painting;
-use Stripe\StripeClient;
-use Stripe\PaymentIntent;
+use Stripe\PaymentIntent as StripePaymentIntent;
 use Stripe\WebhookEndpoint;
 use Illuminate\Http\Request;
-use Stripe\Checkout\Session;
+use Stripe\Checkout\Session as StripeSession;
 use Illuminate\Support\Facades\Log;
 use Stripe\Customer as StripeCustomer;
-use Stripe\Service\WebhookEndpointService;
-
-use function PHPUnit\Framework\throwException;
 use Stripe\Exception\SignatureVerificationException;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
@@ -28,16 +24,8 @@ class StripeWebhookController extends CashierController
      */
     public function createEndpoint()
     {
-
+        // needs to be replaced by app url in production
         $url = env('NGROK_URL') . '/stripe/webhook';
-        $stripe = new StripeClient(config('services.stripe.key'));
-        $webhookEndpointService = new WebhookEndpointService($stripe);
-        $webhookEndpoint = $webhookEndpointService->create([
-                    'url' => env('APP_URL') .'stripe/webhook',
-                    'enabled_events' => ['*'],
-                    // additional configuration options as needed
-                                                            ]);
-
         $endpoint = WebhookEndpoint::create([
             'url' => $url,
             'enabled_events' => ['*'],
@@ -51,42 +39,22 @@ class StripeWebhookController extends CashierController
      */
     public function handleWebhook(Request $request)
     {
-        $payload = $request->all();
+        $event = $this->verifyWebhook($request);
 
-        // Use the WebhookSignature class to verify the request.
-        try {
-            $signature = $request->header('Stripe-Signature');
-            $event = \Stripe\Webhook::constructEvent(
-                $payload, $signature, config('cashier.webhook.secret')
-            );
-        } catch (SignatureVerificationException $exc) {
-            throw($exc);
-        }
-
-        // Record the webhook event in your database or log file
-        // For example:
         Log::info('Webhook received: ' . $event->type);
 
-        // Handle the Stripe webhook event
         switch ($event->type) {
             case 'checkout.session.completed':
-                $session = $event->data->object;
-                $this->handleCompletedSession($session);
+                $this->handleCompletedSession(StripeSession::constructFrom($event->data->object));
                 break;
             case 'checkout.session_expired':
-                $session = $event->data->object;
-                $this->handleExpiredSession($session);
+                $this->handleExpiredSession(StripeSession::constructFrom($event->data->object));
                 break;
             case 'payment_intent.succeeded':
-                $paymentIntent = $event->data->object;
-                $this->paymentSucceeded($paymentIntent);
+                $this->paymentSucceeded(StripePaymentIntent::constructFrom($event->data->object));
                 break;
             case 'payment_intent.failed':
-                $paymentIntent = $event->data->object;
-                $this->paymentFailed($paymentIntent);
-                break;
-            case 'charge_succeeded':
-                $this->paymentSucceeded($event->data);
+                $this->paymentFailed(StripePaymentIntent::constructFrom($event->data->object));
                 break;
             default:
                 break;
@@ -94,56 +62,47 @@ class StripeWebhookController extends CashierController
 
         return response()->json(['success' => true]);
     }
-
-    protected function paymentSucceeded($paymentIntent)
+    private function verifyWebhook(Request $request)
     {
-        PaymentIntent::retrieve($paymentIntent);
-        $payment = $paymentIntent;
-        $status = $payment->paymentSucceeded;
-        $dbPayment = Payment::where('payment_intent_id'==$paymentIntent->id);
+        $payload = $request->all();
+        $signature = $request->header('Stripe-Signature');
+
+        try {
+            return \Stripe\Webhook::constructEvent($payload, $signature, config('cashier.webhook.secret'));
+        } catch (SignatureVerificationException $exc) {
+            throw ($exc);
+        }
+    }
+    protected function paymentSucceeded(StripePaymentIntent $paymentIntent)
+    {
+        $dbPayment = Payment::where('payment_intent_id', $paymentIntent->id)->first();
         $dbPayment->status = 'paid';
         $dbPayment->save();
-        return response('Payment Succeeded' + $payment->id,200);
 
+        return response('Payment Succeeded' . $paymentIntent->id, 200);
     }
 
-    protected function paymentFailed(PaymentIntent $paymentIntent)
+    protected function paymentFailed(StripePaymentIntent $paymentIntent)
     {
-        $paymentIntent = PaymentIntent::retrieve($paymentIntent->id);
-        $payment = $paymentIntent;
-        $status = $payment->paymentFailed;
-        $newPayment = new Payment(['payment_intent_id'=>$paymentIntent]);
-
+        $newPayment = new Payment(['payment_intent_id' => $paymentIntent->id]);
     }
+
     protected function createWebhook()
     {
         $this->createEndpoint();
-
-
-        // Return a response to the user
         return response('Webhook endpoint created successfully');
     }
-    protected function handleCompletedDonation(Session $session)
+
+
+    // Return a response to the user
+
+    protected function handleCompletedSession(StripeSession $session)
     {
-        $id = $session->id;
-        $customer = \Stripe\Customer::retrieve($session->customer);
-        $paymentIntent = \Stripe\PaymentIntent::retrieve($session->payment_intent);
-        $payment = new Payment(['payment_intent_id'=>$session->payment_intent,'status'=>$session->payment_status,'amount_received'=>$paymentIntent->amount / 100]);
-        $newCustomer = new Customer(['stripe_id'=>$customer,'email' => $session->customer_details->email,'checkout_session_id'=>$session->id]);
-    }
-    protected function handleCompletedSession(Session $session)
-    {
+        $customer = StripeCustomer::retrieve($session->customer);
+        $paymentIntent = StripePaymentIntent::retrieve($session->payment_intent);
 
-        $customer = \Stripe\Customer::retrieve($session->customer);
-
-        // Retrieve the Payment Intent
-        $paymentIntent = \Stripe\PaymentIntent::retrieve($session->payment_intent);
-
-        // Check the Payment Intent status
         if ($paymentIntent->status != 'failed') {
-            // Create a new Order
-            Painting::query('id'== $session->metadata->painting);
-            $order = new Order([
+            $order =            $order = new Order([
                 'checkout_session_id' => $session->id,
                 'payment_intent_id' => $paymentIntent->id,
                 'customer_id' => $customer->id,
@@ -152,15 +111,28 @@ class StripeWebhookController extends CashierController
                 'painting_id' => $session->metadata->painting,
             ]);
 
-            // Save the order
             $order->save();
         }
+
         $this->handleCreateCustomer($customer);
         $this->paymentSucceeded($paymentIntent);
+
         return response('Completed Session Handled', 200)->json();
+    }
+    protected function handleExpiredSession(StripeSession $session)
+    {
+        // Perform necessary actions with the session object for expired sessions
+        // For example, update the corresponding order status in the database as expired
+    }
 
+    protected function handleCreateCustomer(StripeCustomer $customer)
+    {
+        $email = $customer->email;
+        $payment_intent_id = $customer;
+        $newCustomer = new Customer();
+    }
 
-   /*     $metadata = $session->metadata->toArray();
+    /*     $metadata = $session->metadata->toArray();
         foreach($metadata as $key => $value){
             if($key == 'donation' && $value == true){
                 $this->handleCompletedDonation($session);
@@ -200,10 +172,10 @@ class StripeWebhookController extends CashierController
         $customerDetails = $session->customer_details;
 
 */
-        // Perform necessary actions with the session object, such as updating the order status
-        // You can access the session properties like this: $session->id, $session->customer, etc.
-    }
-    protected function handleExpiredSession($session)
+    // Perform necessary actions with the session object, such as updating the order status
+    // You can access the session properties like this: $session->id, $session->customer, etc.
+}
+  /*  protected function handleExpiredSession($session)
     {
     $data = $session->toArray();
     // Perform necessary actions with the session object for expired sessions
@@ -213,5 +185,4 @@ class StripeWebhookController extends CashierController
     {
         $email = $customer->email;
         $payment_intent_id = $customer;
-    }
-}
+    } */
