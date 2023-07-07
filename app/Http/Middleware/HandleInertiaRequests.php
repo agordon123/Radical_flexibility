@@ -39,9 +39,6 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'stripe'=>[
-                ['stripe.secret' => env('STRIPE_SECRET_KEY'),'stripe.key'=>env('STRIPE_KEY')]
-            ]
         ]);
     }
 }

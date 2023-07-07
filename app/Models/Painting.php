@@ -30,8 +30,8 @@ class Painting extends Model
     public function product(){
         return $this->belongsTo(Product::class);
     }
-    public function scopeProductId()
+    public function scopeProductId($id)
     {
-
+        return $this->product_id === 'id';
     }
 }

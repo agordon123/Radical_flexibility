@@ -1,13 +1,15 @@
 <script setup>
-import Layout from '@/Layouts/Layout.vue';
-import InputError from '@/Components/UI/InputError.vue';
-import InputLabel from '@/Components/UI/InputLabel.vue';
-import PrimaryButton from '@/Components/UI/PrimaryButton.vue';
-import TextInput from '@/Components/UI/TextInput.vue';
+import GuestLayout from '@/Layouts/GuestLayout.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps({
-    status: String,
+    status: {
+        type: String,
+    },
 });
 
 const form = useForm({
@@ -20,7 +22,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Layout>
+    <GuestLayout>
         <Head title="Forgot Password" />
 
         <div class="mb-4 text-sm text-gray-600">
@@ -55,5 +57,5 @@ const submit = () => {
                 </PrimaryButton>
             </div>
         </form>
-    </Layout>
+    </GuestLayout>
 </template>
